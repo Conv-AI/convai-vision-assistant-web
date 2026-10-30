@@ -1,0 +1,45 @@
+/*
+ * Every scroller draws the kit's thumb (tokens scroll.thumb, 3 : 1 on the sheet, and
+ * scroll.thumb.hover under the pointer): a 6 capsule in a 10 gutter on no track, without the
+ * platform's arrows. Chromium draws its arrows on Windows even with `scrollbar-width: thin`, and
+ * ignores `::-webkit-scrollbar` once a standard scrollbar property is set, so engines with the
+ * pseudo-elements get those alone and the others the standard properties. Under forced colors the
+ * browser draws its own scrollbar.
+ */
+
+@media not (forced-colors: active) {
+  @supports selector(::-webkit-scrollbar) {
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border: 2px solid transparent;
+      border-radius: var(--convai-radius-capsule);
+      background: var(--convai-scroll-thumb) padding-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover,
+    ::-webkit-scrollbar-thumb:active {
+      background-color: var(--convai-scroll-thumb-hover);
+    }
+
+    ::-webkit-scrollbar-button,
+    ::-webkit-scrollbar-corner {
+      display: none;
+      background: transparent;
+    }
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    :root {
+      scrollbar-color: var(--convai-scroll-thumb) transparent;
+    }
+
+    * {
+      scrollbar-width: thin;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "source_checkout": "convai-vision-assistant-web (product-owner working tree)",
+  "source_branch": "codex/public-release-prep",
+  "source_status": "Uncommitted working-tree source; no source changes made during capture",
+  "capture": "Isolated copy without environment files or credentials",
+  "files": [
+    {
+      "file": "src/app/CharacterArtwork.tsx",
+      "sha256": "bb779ddc29891522e5826f5517dbc4283b0406cb7f2f6f488c42bc237631557e"
+    },
+    {
+      "file": "src/app/CharacterPicker.tsx",
+      "sha256": "719ab9cb2a521426e990d4a67fec2a22bf57ee400924d782dbcfcba5af387e4c"
+    },
+    {
+      "file": "src/app/characters.css",
+      "sha256": "03076d2186fe697788a5938725a086ec8920e3f2d4b1502f0a1657e40b82ff5b"
+    },
+    {
+      "file": "src/credentials/characters.ts",
+      "sha256": "d982e7ab760fcda63929945a6f187b8144a4980703691bb089324c59329c508d"
+    },
+    {
+      "file": "server/handler.ts",
+      "sha256": "4fcbb6a71391ea87ba434c67fc59b763f44b6f6eea452756a37c2647585669ba"
+    }
+  ]
+}

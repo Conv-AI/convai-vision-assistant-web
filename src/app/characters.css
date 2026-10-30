@@ -1,0 +1,672 @@
+.va-picker::backdrop {
+  background: var(--convai-scrim);
+}
+
+.va-picker[open] {
+  display: flex;
+}
+
+.va-picker[data-view='gallery'][data-many] {
+  height: min(640px, 100% - 2 * var(--convai-space-16));
+}
+
+.va-picker {
+  display: none;
+  flex-direction: column;
+  box-sizing: border-box;
+  inset: 0;
+  width: min(880px, 100% - 2 * var(--convai-space-16));
+  max-width: none;
+  max-height: min(640px, 100% - 2 * var(--convai-space-16));
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  /* The kit's 1 px edge is a border: the content starts inside it. */
+  border: 1px solid var(--convai-edge);
+  border-radius: var(--convai-radius-l);
+  background: var(--convai-surface-sheet);
+  box-shadow: 0 30px 80px var(--convai-shadow-soft);
+  color: var(--convai-text-primary);
+  font: inherit;
+}
+
+.va-picker[data-view='stage'] {
+  height: min(560px, 100% - 2 * var(--convai-space-16));
+}
+
+/* Gallery ---------------------------------------------------------------------------------------- */
+
+.va-picker__head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--convai-space-12);
+  height: 64px;
+  padding: 0 var(--convai-space-16) 0 var(--convai-space-24);
+}
+
+.va-picker__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--convai-size-heading);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.va-search {
+  display: flex;
+  flex: 0 1 260px;
+  align-items: center;
+  gap: var(--convai-space-8);
+  box-sizing: border-box;
+  min-width: 0;
+  height: 36px;
+  padding: 0 var(--convai-space-12);
+  border: 1px solid transparent;
+  border-radius: var(--convai-radius-s);
+  background: var(--convai-fill);
+  color: var(--convai-text-tertiary);
+}
+
+.va-search:hover:not([data-disabled]):not(:focus-within) {
+  background-image: linear-gradient(var(--convai-fill-hover), var(--convai-fill-hover));
+}
+
+.va-search[data-disabled] {
+  opacity: 0.4;
+}
+
+.va-search[data-disabled] .va-search__field::placeholder {
+  color: var(--convai-text-primary);
+}
+
+.va-search > svg {
+  flex: none;
+}
+
+.va-search:focus-within {
+  border-color: var(--convai-edge-strong);
+}
+
+.va-search:has(:focus-visible) {
+  outline: var(--convai-focus-width) solid var(--convai-focus-ring);
+  outline-offset: var(--convai-focus-gap);
+}
+
+.va-search__field {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-row);
+}
+
+.va-search__field::placeholder {
+  color: var(--convai-text-tertiary);
+}
+
+/* The box draws the ring; the field inside it does not draw a second. */
+.va-search__field:focus-visible {
+  outline: none;
+}
+
+.va-picker__body {
+  --va-picker-side: 28px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding: var(--convai-space-4) calc(var(--va-picker-side) - 10px) var(--convai-space-24)
+    var(--va-picker-side);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
+.va-picker[data-many] .va-picker__body {
+  --va-picker-side: var(--convai-space-24);
+}
+
+.va-picker__faces {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--convai-space-12);
+  padding: 0 var(--convai-space-24) var(--convai-space-12);
+}
+
+.va-picker__faces-label {
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+  line-height: 1;
+}
+
+.va-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--convai-fill-emphasis);
+  color: var(--convai-text-secondary);
+  font: inherit;
+  font-size: var(--convai-size-micro);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.va-face:hover {
+  background: var(--convai-fill-selected);
+}
+
+.va-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--va-picker-columns, 4), minmax(0, 1fr));
+  gap: var(--convai-space-20);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.va-picker__cell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.va-picker__section + .va-picker__section {
+  margin-top: 28px;
+}
+
+.va-picker__section-label {
+  height: 20px;
+  margin: 0 0 var(--convai-space-12);
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+  line-height: 20px;
+}
+
+/* Every card of All characters keeps the letter's 16 slot, 6 above it, so rows align; rows 16 apart. */
+.va-picker__section:last-child .va-picker__grid {
+  row-gap: var(--convai-space-16);
+}
+
+.va-picker__caption {
+  height: 16px;
+  margin-bottom: 6px;
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.va-card {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--convai-radius-m);
+  background: var(--convai-fill-emphasis);
+  color: var(--convai-text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  container-type: size;
+}
+
+.va-card {
+  transition: box-shadow var(--convai-motion-fast) var(--convai-motion-ease);
+}
+
+.va-card:hover {
+  box-shadow: 0 0 0 1px var(--convai-edge-key);
+}
+
+.va-card__anchor {
+  display: block;
+}
+
+.va-card__picture {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transition: transform var(--convai-motion-standard) var(--convai-motion-ease);
+}
+
+.va-card:hover .va-card__picture {
+  transform: scale(1.03);
+}
+
+/* Reduce motion: the picture holds its size and brightens instead, a fade (the fill under a picture
+   does not show, so the edge alone would hardly say hover). */
+.convai-reduce-motion .va-card__picture {
+  transition: filter var(--convai-motion-fast) var(--convai-motion-ease);
+}
+
+.convai-reduce-motion .va-card:hover .va-card__picture {
+  transform: none;
+  filter: brightness(1.08);
+}
+
+.va-card .va-artwork__initial {
+  position: absolute;
+  /* Never closer to the Talking now badge (10 + 24) than 8, on a small card too. */
+  top: max(30%, 42px + 15cqmin);
+  left: 50%;
+  color: var(--convai-text-secondary);
+  font-size: 30cqmin;
+  font-weight: 600;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+}
+
+.va-card::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: min(120px, 60%);
+  background: linear-gradient(180deg, transparent 0%, var(--va-card-scrim) 70%);
+  pointer-events: none;
+}
+
+.va-card__words {
+  position: absolute;
+  z-index: 1;
+  right: var(--convai-space-12);
+  bottom: var(--convai-space-12);
+  left: var(--convai-space-12);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.va-card__line {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--va-card-line);
+  font-size: var(--convai-size-meta);
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.va-card__name {
+  overflow: hidden;
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.va-card__badge {
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 var(--convai-space-8) 0 var(--convai-space-4);
+  border-radius: var(--convai-radius-capsule);
+  background: var(--convai-surface-island);
+  font-size: var(--convai-size-micro);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.va-picker__message {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px;
+  border-radius: var(--convai-radius-m);
+  background: var(--convai-fill);
+}
+
+.va-picker__message--row {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--convai-space-12);
+  padding: var(--convai-space-12) var(--convai-space-12) var(--convai-space-12) 18px;
+}
+
+.va-picker__message-words {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--convai-space-4);
+  min-width: 0;
+}
+
+.va-picker__message-title,
+.va-picker__message-line {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.va-picker__message-title {
+  font-size: var(--convai-size-row);
+  font-weight: 600;
+}
+
+.va-picker__message-line {
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+}
+
+.va-picker__close.convai-button--secondary:not(.convai-disabled) {
+  box-shadow: none;
+}
+
+.va-picker__close .convai-button__icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Stage ------------------------------------------------------------------------------------------ */
+
+.va-character {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.va-character__portrait {
+  position: relative;
+  flex: none;
+  /* Of the dialog's whole width, its edge included: 420 at 880. */
+  width: calc((100% + 2px) * 420 / 880);
+  background: var(--convai-fill-emphasis);
+  container-type: size;
+}
+
+.va-character .va-artwork__initial {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--convai-text-secondary);
+  font-size: 30cqmin;
+  font-weight: 600;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+}
+
+.va-character__back {
+  position: absolute;
+  top: var(--convai-space-16);
+  left: var(--convai-space-16);
+}
+
+.va-character__back.convai-button--secondary:not(.convai-disabled) {
+  background-color: var(--convai-surface-island);
+  box-shadow: none;
+}
+
+.va-character__back .convai-button__icon {
+  width: 14px;
+  height: 14px;
+}
+
+.va-character__dots {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: var(--convai-radius-capsule);
+  background: var(--convai-surface-island);
+  cursor: pointer;
+  transform: translateX(-50%);
+}
+
+.va-character__dots::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 44px;
+  transform: translateY(-50%);
+}
+
+.va-character__dots:focus {
+  outline: none;
+}
+
+.va-character__dots:focus-visible {
+  outline: var(--convai-focus-width) solid var(--convai-focus-ring);
+  outline-offset: 0;
+}
+
+.va-character__dot {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--va-dot);
+}
+
+.va-character__dot[data-shown] {
+  width: 18px;
+  background: var(--convai-text-primary);
+}
+
+.va-character__details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--convai-space-20);
+  min-width: 0;
+  padding: 28px 28px var(--convai-space-24);
+  overflow-y: auto;
+}
+
+.va-character__close {
+  display: flex;
+  justify-content: flex-end;
+  margin: -12px -12px 0 0;
+}
+
+.va-character__name {
+  margin: 0;
+  font-size: var(--convai-size-title);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.va-character__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-8);
+}
+
+.va-character__label {
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+}
+
+.va-character__languages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.va-character__language {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--convai-radius-s);
+  background: var(--convai-fill-emphasis);
+  font-size: var(--convai-size-control);
+}
+
+.va-character__action {
+  display: flex;
+  margin-top: auto;
+}
+
+.va-character__talk {
+  flex: 1;
+  min-width: 0;
+}
+
+.va-character__now {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: var(--convai-space-8);
+  height: 40px;
+  margin: 0;
+  color: var(--convai-text-primary);
+  font-size: var(--convai-size-row);
+  font-weight: 600;
+}
+
+/* Portraits ---------------------------------------------------------------------------------------- */
+
+.va-artwork {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 25% 15%, var(--convai-fill-selected), transparent 70%),
+    var(--convai-fill-emphasis);
+}
+
+.va-artwork__background,
+.va-artwork__foreground {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.va-artwork__background {
+  object-fit: cover;
+}
+
+.va-artwork img {
+  animation: none;
+}
+
+.va-artwork__foreground[data-full] {
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+.va-artwork img[data-loaded] {
+  opacity: 1;
+  animation: va-fade-in var(--convai-motion-standard) linear;
+}
+
+.convai-reduce-motion .va-artwork img {
+  animation: none;
+}
+
+.va-portrait {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+
+  animation: va-fade-in var(--convai-motion-standard) linear;
+}
+
+.convai-reduce-motion .va-portrait {
+  animation: none;
+}
+
+.va-avatar,
+.va-face {
+  overflow: hidden;
+}
+
+/* In a face of 24 to 32, the picture closes in on the face: Convai's square avatar images frame the
+   upper body, with the face about a fifth of the way down. */
+.va-avatar .va-portrait,
+.va-face .va-portrait {
+  transform: scale(2.2);
+  transform-origin: 50% 20%;
+}
+
+.va-face__picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.va-character__picture {
+  position: absolute;
+  inset: 0;
+}
+
+.va-face,
+.va-bar__character .va-avatar {
+  position: relative;
+}
+
+.va-card__picture::after,
+.va-character__picture::after,
+.va-face::after,
+.va-bar__character .va-avatar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--convai-edge);
+  pointer-events: none;
+}
+
+/* Forced colors drop the shadows that draw the picker's edge, the cards' fill and the search's ring. */
+@media (forced-colors: active) {
+  .va-picker,
+  .va-card,
+  .va-search,
+  .va-picker__message {
+    border: 1px solid CanvasText;
+  }
+
+  .va-search:has(:focus-visible) {
+    outline: var(--convai-focus-width) solid Highlight;
+    outline-offset: var(--convai-focus-gap);
+  }
+}

@@ -1,0 +1,451 @@
+.va-quick {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  z-index: 6;
+  box-sizing: border-box;
+  width: var(--va-quick-width);
+  padding: var(--convai-space-8);
+  border-radius: var(--convai-radius-l);
+  background: var(--convai-surface-sheet);
+  box-shadow:
+    inset 0 0 0 1px var(--convai-edge),
+    0 24px 64px var(--convai-shadow-soft);
+  color: var(--convai-text-primary);
+  transform: translateX(-50%);
+
+  animation: va-quick-in var(--convai-motion-deliberate) var(--convai-motion-ease);
+}
+
+.va-quick--over-picture {
+  box-shadow: inset 0 0 0 1px var(--convai-edge);
+}
+
+@keyframes va-quick-in {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+}
+
+.convai-reduce-motion .va-quick {
+  animation-name: va-quick-fade;
+}
+
+@keyframes va-quick-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.va-quick__page {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- The character's row: the 40 portrait, the name and its languages, Change ---------------- */
+
+.va-quick__character {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-12);
+  box-sizing: border-box;
+  height: var(--va-quick-character);
+  margin-bottom: var(--convai-space-8);
+  padding: 0 var(--convai-space-4);
+}
+
+.va-avatar--40 {
+  width: 40px;
+  height: 40px;
+  font-size: var(--convai-size-row);
+}
+
+.va-quick__who {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.va-quick__name,
+.va-quick__line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.va-quick__name {
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.va-quick__line {
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+  line-height: 1.2;
+}
+
+.va-quick__tiles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-8);
+}
+
+.va-quick__row {
+  display: grid;
+  grid-template-columns: repeat(var(--va-quick-columns), minmax(0, 1fr));
+  gap: var(--convai-space-8);
+}
+
+/* A dimmed tile's tooltip anchor takes the tile's cell. */
+.va-quick__tile-anchor {
+  display: flex;
+  min-width: 0;
+}
+
+.va-quick__tile-anchor > .va-quick__tile {
+  flex: 1;
+}
+
+.va-quick__tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  min-width: 0;
+  height: var(--va-quick-tile);
+  margin: 0;
+  padding: var(--convai-space-12);
+  border: 0;
+
+  border-radius: 12px;
+  background: var(--convai-fill-emphasis);
+  color: var(--convai-text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--convai-motion-fast) var(--convai-motion-ease),
+    scale var(--convai-motion-fast) var(--convai-motion-ease);
+}
+
+.va-quick__tile:hover,
+.va-quick__tile[aria-expanded='true'] {
+  background:
+    linear-gradient(var(--convai-fill-hover), var(--convai-fill-hover)), var(--convai-fill-emphasis);
+}
+
+.va-quick__tile:not([aria-disabled='true']):active,
+.va-quick__tile[aria-expanded='true'] {
+  background: var(--convai-fill-pressed);
+}
+
+.va-quick__tile:not([aria-disabled='true']):active {
+  scale: 0.98;
+}
+
+.va-quick__tile:focus-visible {
+  outline: var(--convai-focus-width) solid var(--convai-focus-ring);
+  outline-offset: var(--convai-focus-gap);
+}
+
+.va-quick__tile[data-on] {
+  background: var(--convai-accent-user);
+  color: var(--convai-accent-user-text);
+}
+
+.va-quick__tile[data-on]:hover {
+  background: var(--convai-accent-user-hover);
+}
+
+.va-quick__tile[data-on]:not([aria-disabled='true']):active {
+  background: var(--convai-accent-user-pressed);
+}
+
+.va-quick__tile[data-on] .va-quick__value {
+  color: var(--convai-accent-user-text-quiet);
+}
+
+.va-quick__tile[aria-disabled='true'] {
+  background: var(--convai-fill-emphasis-disabled);
+  cursor: default;
+}
+
+.va-quick__tile[aria-disabled='true'] .va-quick__tile-top,
+.va-quick__tile[aria-disabled='true'] .va-quick__label {
+  color: var(--convai-text-disabled);
+}
+
+.va-quick__tile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 22px;
+}
+
+.va-quick__chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin: -4px -4px -4px 0;
+  border-radius: var(--convai-radius-xs);
+  color: var(--convai-text-secondary);
+  opacity: 0;
+}
+
+.va-quick__tile:hover .va-quick__chevron,
+.va-quick__tile:focus-visible .va-quick__chevron,
+.va-quick__tile[aria-expanded='true'] .va-quick__chevron {
+  opacity: 1;
+}
+
+.va-quick__tile:hover .va-quick__chevron:not(.va-quick__chevron--menu) {
+  background: var(--convai-fill-emphasis);
+}
+
+.va-quick__words {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* One line each at every text size: a word is never broken to fit (rows hold two where three would cut). */
+.va-quick__label,
+.va-quick__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.va-quick__label {
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.va-quick__value {
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+  line-height: 1.2;
+}
+
+/* A key's cap stands on the value line, its middle on the line's middle, without growing it. */
+.va-quick__value--key {
+  display: flex;
+  align-items: center;
+  height: calc(var(--convai-size-meta) * 1.2);
+  overflow: visible;
+}
+
+.va-quick__app-label {
+  box-sizing: border-box;
+  height: var(--va-quick-label);
+  margin: 0;
+  padding: 14px 4px 8px;
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+  line-height: 1.25;
+}
+
+/* ---- All settings ----------------------------------------------------------------------------- */
+
+.va-quick__rule {
+  height: 1px;
+  margin: 3px var(--convai-space-4) 4px;
+  background: var(--convai-edge);
+}
+
+.va-quick__settings {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  height: var(--va-quick-settings);
+  margin: 0;
+  padding: 0 var(--convai-space-8);
+  border: 0;
+  border-radius: var(--convai-radius-s);
+  background: none;
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-row);
+  text-align: left;
+  cursor: pointer;
+}
+
+.va-quick__settings:hover {
+  background: var(--convai-fill-hover);
+}
+
+.va-quick__settings:focus-visible {
+  outline: var(--convai-focus-width) solid var(--convai-focus-ring);
+  outline-offset: calc(-1 * var(--convai-focus-width));
+}
+
+.va-quick__settings-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.va-quick__settings-keys {
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+}
+
+.va-quick__options-header {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-8);
+  margin-bottom: var(--convai-space-12);
+}
+
+.va-quick__options-title {
+  margin: 0;
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+}
+
+.va-quick__options-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-16);
+  padding: var(--convai-space-16);
+  border-radius: 12px;
+  background: var(--convai-fill-emphasis);
+}
+
+.va-quick__sample {
+  margin: 0;
+  font-size: var(--convai-size-caption);
+  font-weight: 600;
+  line-height: 1.3;
+  font-variation-settings: 'opsz' 22;
+}
+
+/* The scale's ends do not follow the size they set. */
+.va-quick__end {
+  font-weight: 600;
+  line-height: 1;
+}
+
+.va-quick__end--small {
+  font-size: 13px;
+}
+
+.va-quick__end--large {
+  font-size: 19px;
+}
+
+/* ---- The Window tile's menu: over its tile, toward the rows above (kit OpenTileMenu) ------------- */
+
+.va-quick__menu {
+  position: absolute;
+  /* Shown once placed over its tile. */
+  visibility: hidden;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  min-width: 180px;
+  padding: calc(var(--convai-space-4) + 1px);
+  border-radius: var(--convai-radius-m);
+  background:
+    linear-gradient(var(--convai-surface-menu), var(--convai-surface-menu)),
+    var(--convai-surface-ground);
+  box-shadow:
+    inset 0 0 0 1px var(--convai-edge-strong),
+    0 12px 32px var(--convai-shadow-soft);
+}
+
+.va-quick__menu-row {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-8);
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--convai-radius-segment);
+  background: none;
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-row);
+  text-align: left;
+  cursor: pointer;
+}
+
+.va-quick__menu-row:hover,
+.va-quick__menu-row:focus-visible {
+  background: var(--convai-fill-pressed);
+}
+
+.va-quick__menu-row:focus-visible {
+  outline-offset: calc(-1 * var(--convai-focus-width));
+}
+
+.va-quick__menu-check {
+  display: flex;
+  flex: none;
+  width: 16px;
+}
+
+.va-quick__menu-words {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+/* ---- Forced colors: the tiles keep their outlines and the on state its system highlight -------- */
+
+@media (forced-colors: active) {
+  .va-quick__tile {
+    border: 1px solid CanvasText;
+  }
+
+  /* The panel's and its menu's edges are shadows; their stand-ins take no room, as the panel's
+     heights are decided and the menu's rows stand inside its 1 px. */
+  .va-quick,
+  .va-quick__menu {
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+
+  /* Drawn as is: the browser would set its words on a Canvas plate, black on black. Within the
+     panel, to outweigh the on state's own value, hover and pressed colors. */
+  .va-quick .va-quick__tile[data-on],
+  .va-quick .va-quick__tile[data-on] * {
+    forced-color-adjust: none;
+    color: HighlightText;
+  }
+
+  .va-quick .va-quick__tile[data-on],
+  .va-quick .va-quick__tile[data-on]:hover,
+  .va-quick .va-quick__tile[data-on]:active {
+    border-color: Highlight;
+    background: Highlight;
+  }
+}
+
+.convai-high-contrast .va-quick__tile {
+  box-shadow: inset 0 0 0 1px var(--convai-edge-strong);
+}
+
+/* Forced colors, a tile dimmed with a reason: its edge, icon and name in GrayText; the reason stays
+   readable in the text's color. */
+@media (forced-colors: active) {
+  .va-quick .va-quick__tile[aria-disabled='true'] {
+    border-color: GrayText;
+  }
+
+  .va-quick .va-quick__tile[aria-disabled='true'] .va-quick__tile-top,
+  .va-quick .va-quick__tile[aria-disabled='true'] .va-quick__label {
+    color: GrayText;
+  }
+}

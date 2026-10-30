@@ -1,0 +1,209 @@
+/* The mode switch: a 32 track, inset 3, gap 2; options 30 × 26 . */
+.va-mode {
+  display: flex;
+  flex: none;
+  gap: 2px;
+  box-sizing: border-box;
+  height: 32px;
+  padding: 3px;
+  border-radius: var(--convai-radius-s);
+  background: var(--convai-fill);
+}
+
+.va-mode__option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 26px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--convai-radius-xs);
+  background: transparent;
+  color: var(--convai-text-secondary);
+  cursor: pointer;
+}
+
+/* A 44 press above and below, as every kit control has ; the two sit side by side. */
+.va-mode__option::before {
+  position: absolute;
+  inset: min(0px, calc((100% - var(--convai-target)) / 2)) 0;
+  content: '';
+}
+
+.va-mode__option:hover {
+  background: var(--convai-fill-hover);
+}
+
+/* Compact while its card hangs from it shows pressed, as the character chip does with its picker. */
+.va-mode__option[aria-expanded='true'],
+.va-mode__option[aria-pressed='true'] {
+  background: var(--convai-fill-selected);
+  color: var(--convai-text-primary);
+}
+
+.convai-high-contrast .va-mode {
+  box-shadow: inset 0 0 0 1px var(--convai-edge-strong);
+}
+
+.convai-high-contrast .va-mode__option[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 1px var(--convai-edge-strong);
+}
+
+.va-compact-card {
+  position: fixed;
+  /* Shown once placed under the switch. */
+  visibility: hidden;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-16);
+  box-sizing: border-box;
+  width: 360px;
+  max-width: calc(100vw - 2 * var(--convai-space-8));
+  padding: var(--convai-space-20);
+  border-radius: var(--convai-radius-bubble);
+
+  background:
+    linear-gradient(var(--convai-surface-menu), var(--convai-surface-menu)),
+    var(--convai-surface-ground);
+  box-shadow:
+    inset 0 0 0 1px var(--convai-edge),
+    0 12px 32px var(--convai-shadow-soft);
+  color: var(--convai-text-primary);
+}
+
+.va-compact-card--over-picture {
+  box-shadow: inset 0 0 0 1px var(--convai-edge);
+}
+
+.va-compact-card__words {
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-8);
+}
+
+.va-compact-card__title {
+  margin: 0;
+  font-size: var(--convai-size-heading);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.va-compact-card__line {
+  margin: 0;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-row);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.va-compact-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--convai-space-8);
+}
+
+/* The floating window: the app's ground, the capsule 8 from every edge. */
+.va-compact-window {
+  margin: 0;
+  overflow: hidden;
+  background: var(--convai-surface-ground);
+  color: var(--convai-text-primary);
+}
+
+.va-compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 100vh;
+  padding: var(--convai-space-8);
+}
+
+.va-compact .convai-capsule {
+  /* No other surface stands under it: the window is the capsule's own. */
+  box-shadow: none;
+}
+
+.va-compact__notice {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-12);
+  box-sizing: border-box;
+  width: 360px;
+  max-width: 100%;
+
+  height: calc(64px * var(--convai-text-scale));
+  padding: 0 var(--convai-space-4) 0 14px;
+  border: 1px solid var(--convai-edge-island);
+  border-radius: var(--convai-radius-capsule);
+  background: var(--convai-surface-island);
+}
+
+/* The one action: 30 high, 12 / 600 (N-CT). */
+.va-compact__notice .convai-button {
+  height: calc(30px * var(--convai-text-scale));
+  font-size: var(--convai-size-meta);
+}
+
+.va-compact__notice-words {
+  display: -webkit-box;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+  line-height: 1.25;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* The tab while the capsule floats: where it went and the way back, in the capsule's place. */
+.va-compact-away {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--convai-space-8);
+  box-sizing: border-box;
+  width: 420px;
+  max-width: 100%;
+  padding: var(--convai-space-16) var(--convai-space-24);
+  border: 1px solid var(--convai-edge-island);
+  border-radius: var(--convai-radius-l);
+  background: var(--convai-surface-island);
+  text-align: center;
+}
+
+.va-compact-away__line {
+  margin: 0;
+  font-size: var(--convai-size-row);
+  font-weight: 600;
+}
+
+.va-compact-away__keys {
+  margin: 0 0 var(--convai-space-8);
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  text-wrap: balance;
+}
+
+/* Forced colors drop the switch's track and its chosen fill, and the card's inset edge. */
+@media (forced-colors: active) {
+  .va-mode {
+    border: 1px solid ButtonText;
+  }
+
+  .va-mode__option[aria-expanded='true'],
+  .va-mode__option[aria-pressed='true'] {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .va-compact-card {
+    border: 1px solid CanvasText;
+  }
+}

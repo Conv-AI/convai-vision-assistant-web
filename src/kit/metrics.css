@@ -1,0 +1,143 @@
+.convai-theme {
+  --convai-text-scale: 1;
+
+  /* Spacing scale */
+  --convai-space-4: 4px;
+  --convai-space-8: 8px;
+  --convai-space-12: 12px;
+  --convai-space-16: 16px;
+  --convai-space-20: 20px;
+  --convai-space-24: 24px;
+  --convai-space-32: 32px;
+  --convai-space-48: 48px;
+
+  /* Every control has a 44 target where the room allows; the floor is 24 (0.51.0). */
+  --convai-target: 44px;
+  --convai-target-floor: 24px;
+
+  /* Focus ring: 2 px, 2 px outside the control, concentric (radius = control radius + 4). */
+  --convai-focus-width: 2px;
+  --convai-focus-gap: 2px;
+
+  /* Type sizes at the user's text size */
+  --convai-size-display: max(11px, calc(44px * var(--convai-text-scale)));
+  --convai-size-title: max(11px, calc(28px * var(--convai-text-scale)));
+  --convai-size-caption: max(11px, calc(22px * var(--convai-text-scale)));
+  --convai-size-heading: max(11px, calc(17px * var(--convai-text-scale)));
+  --convai-size-body: max(11px, calc(15px * var(--convai-text-scale)));
+  --convai-size-row: max(11px, calc(14px * var(--convai-text-scale)));
+  --convai-size-control: max(11px, calc(13px * var(--convai-text-scale)));
+  --convai-size-meta: max(11px, calc(12px * var(--convai-text-scale)));
+  --convai-size-micro: max(11px, calc(11px * var(--convai-text-scale)));
+
+  font-family: var(--convai-font-ui);
+  font-size: var(--convai-size-body);
+  color: var(--convai-text-primary);
+  background-color: var(--convai-surface-ground);
+  /* The 17, 22 and 28 cuts are fixed per role, not picked from the size, so text size never changes a cut. */
+  font-optical-sizing: none;
+}
+
+.convai-theme.convai-high-contrast {
+  --convai-focus-width: 3px;
+}
+
+.convai-text--display {
+  font-size: var(--convai-size-display);
+  font-weight: 600;
+  line-height: calc(52 / 44);
+  letter-spacing: -0.5px;
+  font-variation-settings: 'opsz' 28;
+}
+
+.convai-text--title {
+  font-size: var(--convai-size-title);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variation-settings: 'opsz' 28;
+}
+
+.convai-text--caption {
+  font-size: var(--convai-size-caption);
+  font-weight: 600;
+  font-variation-settings: 'opsz' 22;
+}
+
+.convai-text--caption-question {
+  font-size: var(--convai-size-heading);
+  font-weight: 600;
+  color: var(--convai-text-secondary);
+  font-variation-settings: 'opsz' 17;
+}
+
+.convai-text--heading {
+  font-size: var(--convai-size-heading);
+  font-weight: 600;
+  font-variation-settings: 'opsz' 17;
+}
+
+.convai-text--body {
+  font-size: var(--convai-size-body);
+  font-weight: 400;
+}
+
+.convai-text--row {
+  font-size: var(--convai-size-row);
+  font-weight: 400;
+}
+
+.convai-text--control {
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+}
+
+.convai-text--meta {
+  font-size: var(--convai-size-meta);
+  font-weight: 400;
+  color: var(--convai-text-secondary);
+}
+
+.convai-text--micro {
+  font-size: var(--convai-size-micro);
+  font-weight: 600;
+}
+
+.convai-tone--primary {
+  color: var(--convai-text-primary);
+}
+
+.convai-tone--secondary {
+  color: var(--convai-text-secondary);
+}
+
+.convai-tone--tertiary {
+  color: var(--convai-text-tertiary);
+}
+
+.convai-tone--character {
+  color: var(--convai-ai-text);
+}
+
+.convai-tone--danger {
+  color: var(--convai-danger-text);
+}
+
+.convai-tone--warn {
+  color: var(--convai-warn-text);
+}
+
+/* Read by screen readers, not drawn. */
+.convai-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Keyboard focus on any focusable kit part. */
+.convai-theme :focus-visible {
+  outline: var(--convai-focus-width) solid var(--convai-focus-ring);
+  outline-offset: var(--convai-focus-gap);
+}

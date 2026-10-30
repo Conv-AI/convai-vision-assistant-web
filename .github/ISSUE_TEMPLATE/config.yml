@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Convai documentation
+    url: https://docs.convai.com
+    about: Questions about Convai characters, API keys and the Web SDK.

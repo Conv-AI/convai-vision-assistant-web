@@ -1,0 +1,66 @@
+/* The scrim: the modal dialog's backdrop, over the whole page. */
+.convai-dialog::backdrop {
+  background: var(--convai-scrim);
+}
+
+.convai-dialog[open] {
+  display: flex;
+}
+
+.convai-dialog {
+  display: none;
+  inset: 0;
+  margin: auto;
+  border: 0;
+  color: var(--convai-text-primary);
+  font: inherit;
+  flex-direction: column;
+  gap: var(--convai-space-16);
+  box-sizing: border-box;
+  width: 400px;
+  max-width: calc(100% - 2 * var(--convai-space-16));
+  padding: var(--convai-space-24);
+  border-radius: var(--convai-radius-l);
+  background: var(--convai-surface-sheet);
+  box-shadow:
+    inset 0 0 0 1px var(--convai-edge),
+    0 24px 64px var(--convai-shadow-soft);
+}
+
+.convai-dialog__words {
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-8);
+}
+
+.convai-dialog__title {
+  margin: 0;
+  color: var(--convai-text-primary);
+  font-size: var(--convai-size-heading);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.convai-dialog__body {
+  margin: 0;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-body);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* Each sentence on its own line, so the dialog keeps one height whatever its words. */
+.convai-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--convai-space-8);
+  /* 16 of the gap and 8 more: actions stand 24 under what is above them. */
+  margin-top: var(--convai-space-8);
+}
+
+/* Forced colors drop the shadow that draws the edge: a border stands in for it. */
+@media (forced-colors: active) {
+  .convai-dialog {
+    border: 1px solid CanvasText;
+  }
+}

@@ -1,0 +1,833 @@
+.va-first-run {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(
+    70% 60% at 50% 30%,
+    var(--va-launch-light) 0%,
+    var(--va-first-run-mid) 55%,
+    var(--convai-surface-ground) 100%
+  );
+  color: var(--convai-text-primary);
+}
+
+.va-first-run__back {
+  position: absolute;
+  /* 62: the words, drawn at line height 1 in the kit, sit at 64 inside the 44 target. */
+  top: 62px;
+  left: var(--convai-space-32);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  /* 44 high to press; drawn as its words. */
+  min-height: var(--convai-target);
+  margin: -14px -8px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--convai-radius-s);
+  background: none;
+  color: var(--convai-text-secondary);
+  font: inherit;
+  font-size: var(--convai-size-row);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.va-first-run__back:hover {
+  color: var(--convai-text-primary);
+}
+
+.va-first-run__dashes {
+  position: absolute;
+  top: 72px;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.va-first-run__dash {
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--va-dash-off);
+}
+
+.va-first-run__dash--on {
+  background: var(--convai-text-primary);
+}
+
+.va-first-run__scroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+}
+
+/* More below: the foot fades (0.47.0-b). */
+.va-first-run__scroll[data-more] {
+  mask-image: linear-gradient(to bottom, var(--convai-scrim-black) calc(100% - 48px), transparent);
+}
+
+/* Scrolled: the column fades out under Back and the dashes too. */
+.va-first-run__scroll[data-scrolled] {
+  mask-image: linear-gradient(to bottom, transparent 64px, var(--convai-scrim-black) 112px);
+}
+
+.va-first-run__scroll[data-scrolled][data-more] {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 64px,
+    var(--convai-scrim-black) 112px,
+    var(--convai-scrim-black) calc(100% - 48px),
+    transparent
+  );
+}
+
+.va-first-run__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  animation: va-first-run-step var(--convai-motion-standard) var(--convai-motion-ease) both;
+}
+
+@keyframes va-first-run-step {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+/* Reduce motion: a 150 ms fade-in, nothing moves. */
+@keyframes va-first-run-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.convai-reduce-motion .va-first-run__step {
+  animation-name: va-first-run-fade;
+}
+
+.va-first-run__column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 100%;
+  padding: 19vh 40px var(--convai-space-48);
+  text-align: center;
+}
+
+.va-first-run__words {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.va-first-run__title {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  outline: none;
+}
+
+.va-first-run__title {
+  font-size: var(--convai-size-title);
+  line-height: 1.2;
+  font-variation-settings: 'opsz' 28;
+}
+
+.va-first-run__body {
+  max-width: 460px;
+  margin: 0;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-body);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* What the step shows stands 32 under the words; the actions 36 under it. */
+.va-first-run__turn,
+.va-first-run__modes,
+.va-first-run__key,
+.va-first-run__permissions,
+.va-first-run__done {
+  margin-top: var(--convai-space-32);
+}
+
+.va-first-run__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-24);
+  margin-top: 36px;
+}
+
+.va-first-run__go {
+  min-width: 160px;
+  padding: 0 28px;
+  font-size: var(--convai-size-body);
+}
+
+.va-first-run__back:focus-visible,
+.va-first-run__mode:focus-visible {
+  outline: var(--convai-focus-width) solid var(--convai-focus-ring);
+  outline-offset: var(--convai-focus-gap);
+}
+
+/* A chosen card already wears a 2 px ring: the focus stands clear of it, not merged into it. */
+.va-first-run__mode[aria-checked='true']:not(.va-first-run__mode--place):focus-visible {
+  outline-offset: calc(var(--convai-focus-gap) + 2px);
+}
+
+.va-first-run__turn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 440px;
+  max-width: 100%;
+  min-height: 112px;
+  text-align: left;
+}
+
+.va-first-run__ask,
+.va-first-run__answer {
+  max-width: 86%;
+  padding: 10px 14px;
+  font-size: var(--convai-size-body);
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--convai-motion-standard) var(--convai-motion-ease),
+    transform var(--convai-motion-standard) var(--convai-motion-ease);
+}
+
+.va-first-run__ask[data-shown],
+.va-first-run__answer[data-shown] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Reduce motion coming on while the turn plays: the bubbles still to come fade in, nothing rises. */
+.convai-reduce-motion .va-first-run__ask,
+.convai-reduce-motion .va-first-run__answer {
+  transform: none;
+  transition-property: opacity;
+}
+
+.va-first-run__ask {
+  align-self: flex-end;
+  max-width: 80%;
+  border-radius: 18px 18px 4px;
+  background: var(--convai-accent-user);
+  color: var(--convai-accent-user-text);
+}
+
+.va-first-run__answer {
+  align-self: flex-start;
+  border-radius: 18px 18px 18px 4px;
+  background: var(--convai-surface-bubble);
+  color: var(--convai-text-primary);
+}
+
+.va-first-run__unread {
+  color: var(--convai-text-secondary);
+  transition: color var(--convai-motion-deliberate) var(--convai-motion-ease);
+}
+
+.va-first-run__modes {
+  display: flex;
+  justify-content: center;
+  gap: var(--convai-space-16);
+}
+
+.va-first-run__mode {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+  width: 300px;
+  padding: var(--convai-space-12);
+  border-radius: 20px;
+  background: var(--convai-fill-hover);
+  text-align: left;
+  cursor: pointer;
+}
+
+.va-first-run__mode[aria-checked='false']:hover {
+  background: var(--convai-fill-emphasis);
+}
+
+.va-first-run__mode[aria-checked='true'] {
+  background: var(--va-card-selected);
+  box-shadow: 0 0 0 2px var(--convai-focus-ring);
+}
+
+.va-first-run__well {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--convai-space-16);
+  height: 132px;
+  border-radius: var(--convai-space-12);
+  background: var(--convai-surface-ground);
+}
+
+.va-first-run__well-key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--convai-radius-s);
+  background: var(--convai-accent-user);
+  box-shadow: 0 1px 0 var(--convai-edge-button);
+  color: var(--convai-accent-user-text);
+  font-size: 18px;
+  font-weight: 600;
+
+  animation: va-first-run-press 1.6s var(--convai-motion-ease) infinite;
+}
+
+@keyframes va-first-run-press {
+  0%,
+  100% {
+    transform: none;
+  }
+  40%,
+  70% {
+    transform: translateY(2px);
+  }
+}
+
+.va-first-run__wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 36px;
+}
+
+.va-first-run__bar {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--convai-text-secondary);
+  transform-origin: center;
+  animation: va-first-run-wave 1.2s ease-in-out infinite;
+}
+
+.va-first-run__bar:nth-child(2n) {
+  animation-delay: -0.4s;
+}
+
+.va-first-run__bar:nth-child(3n) {
+  animation-delay: -0.8s;
+}
+
+@keyframes va-first-run-wave {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.45);
+  }
+}
+
+.convai-reduce-motion .va-first-run__bar,
+.convai-reduce-motion .va-first-run__well-key {
+  animation: none;
+}
+
+.va-first-run__mode-words {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 4px 4px;
+}
+
+.va-first-run__mode-name {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-8);
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+}
+
+.va-first-run__radio {
+  flex: none;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  margin-left: auto;
+  border: 1.5px solid var(--convai-text-disabled);
+  border-radius: 50%;
+}
+
+.va-first-run__mode[aria-checked='true'] .va-first-run__radio {
+  border: 5px solid var(--convai-text-primary);
+}
+
+.va-first-run__radio-dot {
+  display: none;
+}
+
+.va-first-run__mode-line {
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.va-first-run__modes--place {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--convai-space-20);
+  width: calc((920px - 2 * var(--convai-space-20)) * 2 / 3 + var(--convai-space-20));
+  max-width: 100%;
+}
+
+.va-first-run__mode--place {
+  gap: var(--convai-space-16);
+  width: auto;
+  padding: var(--convai-space-16);
+  background: var(--convai-fill);
+}
+
+.va-first-run__mode--place[aria-checked='false']:hover {
+  background: var(--convai-fill-emphasis);
+}
+
+.va-first-run__mode--place[aria-checked='true'] {
+  background: var(--convai-fill);
+  box-shadow: inset 0 0 0 2px var(--convai-text-primary);
+}
+
+.va-first-run__mode--place .va-first-run__mode-words {
+  gap: 6px;
+  padding: 0;
+}
+
+.va-first-run__mode--place .va-first-run__mode-name {
+  align-items: flex-start;
+  gap: var(--convai-space-12);
+  font-size: var(--convai-size-heading);
+  line-height: 1.2;
+}
+
+.va-first-run__mode--place .va-first-run__radio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  box-shadow: inset 0 0 0 1.5px var(--va-place-radio);
+}
+
+.va-first-run__mode--place[aria-checked='true'] .va-first-run__radio {
+  border: 0;
+  background: var(--convai-switch-on);
+  box-shadow: none;
+}
+
+.va-first-run__mode--place[aria-checked='true'] .va-first-run__radio-dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--convai-switch-knob);
+}
+
+/* The card's well is a screen (16 : 10), with another app's window and the character's where the
+   mode puts them (Unity `WhereKiraStaysStep`). */
+.va-first-run__well--stay {
+  position: relative;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  background: var(--va-place-well);
+}
+
+.va-stay-picture {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.va-stay-picture__app,
+.va-stay-picture__kira {
+  position: absolute;
+  box-sizing: border-box;
+  border-radius: var(--convai-radius-xs);
+}
+
+.va-stay-picture__app {
+  background: var(--va-place-app);
+}
+
+.va-stay-picture__kira {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--convai-surface-ground);
+  box-shadow: 0 0 0 1px var(--va-place-kira-edge);
+}
+
+/* A capsule's ends are half its height round. */
+.va-stay-picture__kira--capsule {
+  border-radius: var(--convai-radius-capsule);
+}
+
+/* 6 in the large well and the small one alike: every dot of the family is 6. */
+.va-stay-picture__dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--convai-lens-green);
+}
+
+@media (width < 720px) {
+  .va-first-run__modes {
+    flex-direction: column;
+    width: 100%;
+    max-width: 540px;
+  }
+
+  .va-first-run__mode {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+
+  .va-first-run__modes--place {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--convai-space-16);
+  }
+
+  .va-first-run__mode--place {
+    padding: var(--convai-space-12);
+  }
+
+  .va-first-run__well {
+    flex: none;
+    gap: 6px;
+    width: 96px;
+    height: 60px;
+  }
+
+  .va-first-run__well--stay {
+    aspect-ratio: auto;
+  }
+
+  .va-first-run__well-key {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--convai-radius-xs);
+    font-size: var(--convai-size-meta);
+  }
+
+  .va-first-run__wave {
+    display: none;
+  }
+
+  .va-first-run__mode-words {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+  }
+}
+
+/* Cards: the permission rows and the talk key's row (540, the fill, radius.m). */
+.va-first-run__card {
+  display: flex;
+  flex-direction: column;
+  width: 540px;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--convai-radius-m);
+  background: var(--convai-fill);
+  list-style: none;
+  text-align: left;
+}
+
+.va-first-run__permissions,
+.va-first-run__key,
+.va-first-run__done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.va-first-run__row,
+.va-first-run__key-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-sizing: border-box;
+  min-height: 64px;
+  padding: 10px 12px 10px var(--convai-space-16);
+}
+
+.va-first-run__key-row {
+  min-height: 56px;
+  padding-block: var(--convai-space-8);
+}
+
+.va-first-run__row + .va-first-run__row {
+  box-shadow: inset 0 1px 0 var(--convai-edge);
+}
+
+.va-first-run__glyph {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--convai-radius-s);
+  background: var(--convai-fill-emphasis);
+}
+
+/* While the microphone is needed and not given (README v0.5, first run). */
+.va-first-run__warn {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--convai-warn);
+  box-shadow: 0 0 0 2px var(--va-first-run-card);
+}
+
+.va-first-run__row-words {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.va-first-run__row-name {
+  font-size: var(--convai-size-row);
+  font-weight: 600;
+}
+
+.va-first-run__row-line {
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.va-first-run__allowed {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 4px;
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.va-first-run__check {
+  flex: none;
+  color: var(--convai-switch-on);
+}
+
+.va-first-run__allowed .va-first-run__check {
+  stroke-width: 2;
+}
+
+.va-first-run__state {
+  padding-right: 4px;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  white-space: nowrap;
+}
+
+/* Two lines reserved, so the actions do not move when the words change . */
+.va-first-run__note {
+  max-width: 520px;
+  min-height: calc(2 * 1.45em);
+  margin: 14px 0 0;
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-control);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.va-first-run__note--done {
+  min-height: 0;
+}
+
+.va-first-run__key-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: var(--convai-space-20);
+}
+
+.va-first-run__cap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 88px;
+  height: 88px;
+  padding: 0 var(--convai-space-16);
+  border: 1.5px solid transparent;
+  border-radius: 18px;
+  background: var(--convai-accent-user);
+  box-shadow: 0 2px 0 var(--convai-edge-strong);
+  color: var(--convai-accent-user-text);
+  font-size: 34px;
+  font-weight: 600;
+}
+
+.va-first-run__cap--recording {
+  border-color: var(--convai-edge-key);
+  background: var(--convai-fill);
+  color: var(--convai-text-tertiary);
+}
+
+.va-first-run__cap--refused {
+  border-color: var(--convai-danger-text);
+  color: var(--convai-text-primary);
+}
+
+.va-first-run__cap-note {
+  max-width: 440px;
+  min-height: 1lh;
+  margin: 0;
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-control);
+  line-height: normal;
+  text-wrap: pretty;
+}
+
+.va-first-run__cap-note--refused {
+  color: var(--convai-text-primary);
+}
+
+.va-first-run__small-cap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: var(--convai-radius-xs);
+  /* The kit's KeyCap at 24 (.cv-keycap--24): fill.emphasis inside a 1 px key edge. */
+  background: var(--convai-fill-emphasis);
+  box-shadow: inset 0 0 0 1px var(--convai-edge-key);
+  font-size: var(--convai-size-meta);
+  font-weight: 600;
+}
+
+.va-first-run__chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--convai-space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.va-first-run__chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 var(--convai-space-12);
+  border-radius: var(--convai-radius-capsule);
+  background: var(--convai-fill-emphasis);
+  font-size: var(--convai-size-control);
+  white-space: nowrap;
+}
+
+.va-first-run__chip .va-first-run__check {
+  stroke-width: 2;
+}
+
+.va-first-run__dot {
+  flex: none;
+  width: 4px;
+  height: 4px;
+  margin: 0 4px;
+  border-radius: 50%;
+  background: var(--convai-text-secondary);
+}
+
+/* The welcome shown again from Settings: a modal layer over the conversation, the whole window. */
+.va-first-run-replay {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.va-first-run-replay::backdrop {
+  background: transparent;
+}
+
+/* Forced colors drop a card's fill and its chosen ring (a shadow): a border, and the chosen one 2 px. */
+@media (forced-colors: active) {
+  .va-first-run__mode {
+    border: 1px solid CanvasText;
+  }
+
+  .va-first-run__mode[aria-checked='true'] {
+    border: 2px solid Highlight;
+  }
+
+  /* The place radio is drawn by fill and shadow, which forced colors drop: a ring, and a thick
+     Highlight ring around the dot's place for the chosen one. */
+  .va-first-run__mode--place .va-first-run__radio {
+    border: 1.5px solid CanvasText;
+  }
+
+  .va-first-run__mode--place[aria-checked='true'] .va-first-run__radio {
+    border: 6px solid Highlight;
+  }
+
+  /* The pictures' screen and windows are fills and shadows too: drawn as outlines. */
+  .va-first-run__well--stay,
+  .va-stay-picture__app,
+  .va-stay-picture__kira {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* Forced colors drop the step dashes' fill: the steps ahead in GrayText, the one shown in the text's color. */
+@media (forced-colors: active) {
+  .va-first-run__dash {
+    forced-color-adjust: none;
+    background: GrayText;
+  }
+
+  .va-first-run__dash--on {
+    background: CanvasText;
+  }
+}

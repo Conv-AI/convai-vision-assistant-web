@@ -1,0 +1,26 @@
+# Secrets never enter an image: the API key is given to `docker run`.
+.env*
+!.env.example
+
+# Built or installed inside the image.
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Local and test output.
+.claude/
+.git/
+.vercel/
+captures/
+coverage/
+test-results/
+playwright-report/
+blob-report/
+*.log
+
+# Local package cache and agent workspace metadata
+.pnpm-store/
+.agents/
+.codex/
+.public-release/
+test-results-public/

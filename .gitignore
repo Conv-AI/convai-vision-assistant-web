@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# Environment: secrets stay local; only the example is shared
+.env*
+!.env.example
+
+# Local agent notes
+.claude/
+
+# Vercel
+.vercel/
+
+# Test output
+coverage/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Screen captures from local runs
+captures/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editors and OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+.DS_Store
+Thumbs.db
+
+# Local package cache and agent workspace metadata
+.pnpm-store/
+.agents/
+.codex/
+.public-release/
+test-results-public/

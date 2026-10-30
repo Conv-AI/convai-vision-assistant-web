@@ -1,0 +1,1878 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.va-window {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+  min-width: 560px;
+  min-height: 560px;
+  background: var(--convai-surface-ground);
+}
+
+/* The window's own keys move no focus: a control the pointer focused draws no ring for them. */
+[data-ring-quiet] {
+  --convai-focus-width: 0px;
+}
+
+/* The bar --------------------------------------------------------------------------------------- */
+
+.va-bar {
+  position: relative;
+  /* Over the body, so the source menu opens over the stage. */
+  z-index: 10;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--convai-space-12);
+  height: 48px;
+  padding: 0 var(--convai-space-12) 0 var(--convai-space-16);
+}
+
+.va-bar__character,
+.va-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-8);
+  box-sizing: border-box;
+  height: 32px;
+  border-radius: 16px;
+  background: var(--convai-fill-emphasis);
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.va-bar__character {
+  min-width: 0;
+  max-width: 100%;
+
+  padding: 0 10px 0 var(--convai-space-4);
+  border: 0;
+  color: var(--convai-text-primary);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.va-bar__character:hover,
+.va-bar__character[aria-expanded='true'] {
+  background: var(--convai-fill-selected);
+}
+
+.va-bar__character-anchor {
+  display: flex;
+  min-width: 0;
+}
+
+.va-bar__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.va-bar__source {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  display: flex;
+  max-width: max(220px, calc(100% - 760px));
+  transform: translateX(-50%);
+}
+
+/* Measured (TitleBar, `sourcePlace`): the chip's left edge is placed, centred or slid beside the
+   character chip, and the words are cut to the room left free. */
+.va-bar__source[data-placed] {
+  max-width: none;
+  transform: none;
+}
+
+/* The menu under a chip slid beside a long name moves in, 8 clear of the window's side. */
+.va-bar__source[data-placed] .va-source-menu {
+  transform: translateX(calc(-50% + var(--va-source-menu-shift, 0px)));
+}
+
+.va-chip-anchor {
+  min-width: 0;
+}
+
+.va-chip {
+  min-width: 0;
+  max-width: 100%;
+  padding: 0 var(--convai-space-12);
+  border: 0;
+  color: var(--convai-text-primary);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.va-chip:hover,
+.va-chip[data-open] {
+  background: var(--convai-fill-selected);
+}
+
+.va-chip--passive,
+.va-chip--passive:hover {
+  background: var(--convai-fill-emphasis);
+  cursor: default;
+}
+
+.va-chip svg {
+  flex: none;
+}
+
+.va-chip__slot {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 8px;
+  height: 8px;
+}
+
+.va-chip__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.va-chip__slot[data-mark='live'] .va-chip__dot {
+  background: var(--convai-accent-share);
+}
+
+.va-chip__slot[data-mark='paused'] .va-chip__dot {
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 1.5px var(--convai-text-secondary);
+}
+
+.va-chip__slot[data-mark='failed'] .va-chip__dot {
+  background: var(--convai-danger-fill);
+}
+
+.va-chip__loader {
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.va-chip__loader-ring {
+  stroke: var(--va-loader-ring);
+}
+
+.va-chip__loader-arc {
+  stroke: var(--convai-text-secondary);
+  stroke-linecap: round;
+  transform-origin: 4px 4px;
+  animation: convai-spin 0.9s linear infinite;
+}
+
+.va-chip__loader-still {
+  display: none;
+  stroke: var(--convai-text-secondary);
+  stroke-linecap: round;
+}
+
+.convai-reduce-motion .va-chip__loader-ring,
+.convai-reduce-motion .va-chip__loader-arc {
+  display: none;
+}
+
+.convai-reduce-motion .va-chip__loader-still {
+  display: inline;
+}
+
+.va-chip__words {
+  display: flex;
+  min-width: 0;
+}
+
+.va-chip__kind {
+  flex: none;
+}
+
+/* " · Integrated Camera": the separator's spaces are the words' own (white-space: pre). */
+.va-chip__name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--convai-text-secondary);
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+
+.va-chip--quiet {
+  color: var(--convai-text-secondary);
+  font-weight: 400;
+}
+
+.va-bar__chevron,
+.va-chip__chevron {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  opacity: 0.6;
+}
+
+.va-chip .va-chip__chevron {
+  transition: transform var(--convai-motion-fast) var(--convai-motion-ease);
+}
+
+.va-chip[data-open] .va-chip__chevron {
+  transform: rotate(180deg);
+}
+
+.convai-reduce-motion .va-chip .va-chip__chevron {
+  transition: none;
+}
+
+.va-source-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 352px;
+
+  padding: calc(var(--convai-space-4) + 1px);
+  border-radius: var(--convai-radius-m);
+
+  background:
+    linear-gradient(var(--convai-surface-menu), var(--convai-surface-menu)),
+    var(--convai-surface-ground);
+  box-shadow:
+    inset 0 0 0 1px var(--convai-edge-strong),
+    0 12px 32px var(--convai-shadow-soft);
+  transform: translateX(-50%);
+  outline: none;
+}
+
+.va-source-menu__heading {
+  margin: 0;
+  padding: 8px 10px 4px;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+  line-height: 1;
+}
+
+/* A passive line where rows would be: not a button, in text.secondary. */
+.va-source-menu__note {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  margin: 0;
+  padding: 0 10px;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-row);
+}
+
+.va-source-menu__row {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-12);
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--convai-radius-segment);
+  background: none;
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-row);
+  text-align: left;
+  cursor: pointer;
+}
+
+.va-source-menu__row--camera {
+  height: 48px;
+}
+
+.va-source-menu__row:hover,
+.va-source-menu:not(:hover) .va-source-menu__row:focus,
+.va-source-menu__row:focus-visible {
+  background: var(--convai-fill-highlight);
+}
+
+.va-source-menu__row:active {
+  background: var(--convai-fill-pressed);
+}
+
+.va-source-menu__row:focus-visible {
+  outline-offset: calc(-1 * var(--convai-focus-width));
+}
+
+/* A camera's picture slot: fill.emphasis, the 1 px edge drawn over the picture (kit Menu media). */
+.va-source-menu__picture {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 30px;
+  overflow: hidden;
+  border-radius: var(--convai-radius-xs);
+  background: var(--convai-fill-emphasis);
+  color: var(--convai-text-primary);
+}
+
+.va-source-menu__picture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--convai-edge);
+}
+
+.va-source-menu__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.va-window[data-mirror='off'] .va-source-menu__video,
+.va-window[data-mirror='off'] .va-camera__video {
+  transform: none;
+}
+
+.va-source-menu__glyph {
+  display: flex;
+  flex: none;
+  justify-content: center;
+  width: 20px;
+}
+
+.va-source-menu__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.va-source-menu__check {
+  flex: none;
+}
+
+.va-source-menu__size {
+  flex: none;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+.va-source-menu__aside {
+  flex: none;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+}
+
+/* Lighter on a pressed row's fill, where text.secondary would fall under 4.5 : 1. */
+.va-source-menu__row:active .va-source-menu__aside,
+.va-source-menu__row:active .va-source-menu__size {
+  color: var(--va-menu-aside-on-fill);
+}
+
+.va-source-menu__row--indented {
+  padding-left: calc(10px + 20px + var(--convai-space-12));
+}
+
+.va-source-menu__rule {
+  height: 1px;
+  margin: var(--convai-space-4) var(--convai-space-8);
+  background: var(--convai-edge);
+}
+
+.va-source-menu__rule:has(+ [role='group']) {
+  margin-bottom: var(--convai-space-8);
+}
+
+.va-bar__tools {
+  display: flex;
+
+  gap: var(--convai-space-12);
+  margin-left: auto;
+}
+
+.va-bar__tools .convai-icon-button.convai-button--secondary:not(.convai-disabled) {
+  box-shadow: none;
+}
+
+.va-bar__tools .convai-icon-button.convai-button--secondary[aria-pressed='true'] {
+  background-color: var(--va-tool-open);
+}
+
+.convai-high-contrast .va-bar__tools .convai-icon-button[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 1px var(--convai-edge-strong);
+}
+
+.va-avatar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--convai-portrait-ground);
+  color: var(--convai-text-primary);
+  font-size: var(--convai-size-micro);
+  font-weight: 600;
+}
+
+.va-avatar--28 {
+  width: 28px;
+  height: 28px;
+}
+
+/* The body: the stage and, when pinned, the transcript column ---------------------------------- */
+
+.va-body {
+  display: flex;
+  flex: 1;
+  gap: var(--convai-space-12);
+  min-height: 0;
+  padding: 0 var(--convai-space-12) var(--convai-space-12);
+}
+
+.va-stage {
+  --va-free-right: 0px;
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--convai-radius-l);
+  background: var(--va-surface-stage);
+  box-shadow: inset 0 0 0 1px var(--va-edge-stage);
+}
+
+.va-nothing {
+  position: absolute;
+  inset: 0 var(--va-free-right) 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--convai-space-16);
+  padding: 0 var(--convai-space-24) 96px;
+  text-align: center;
+}
+
+.va-nothing--under-banner {
+  padding-top: 172px;
+  padding-bottom: 104px;
+}
+
+.va-nothing p,
+.va-launch p,
+.va-captions p,
+.va-continuum p,
+.va-ask p,
+.va-transcript p {
+  margin: 0;
+}
+
+.va-nothing__title {
+  font-size: var(--convai-size-caption);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-variation-settings: 'opsz' 22;
+}
+
+.va-nothing__line {
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-body);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.va-nothing .convai-button {
+  margin-top: var(--convai-space-8);
+}
+
+.va-nothing__line--account {
+  display: block;
+}
+
+.va-nothing__line--account a {
+  color: var(--convai-text-primary);
+  text-underline-offset: 3px;
+}
+
+.va-starting__title {
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.va-starting .va-starting__line {
+  margin-top: calc(-1 * var(--convai-space-8));
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  line-height: 1.45;
+}
+
+.va-starting .convai-button {
+  margin-top: 0;
+}
+
+.va-crop {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.va-crop:focus {
+  outline: none;
+}
+
+.va-crop__bar-row {
+  position: absolute;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--convai-space-28);
+}
+
+.va-crop__bar {
+  /* Its 40 buttons grow with the text (gain 1), and 8 stand round them: 56 at 1.00 (crop.ts). */
+  --va-crop-bar-height: calc(40px * var(--convai-text-scale) + 16px);
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-8);
+  box-sizing: border-box;
+  height: var(--va-crop-bar-height);
+  padding: 0 var(--convai-space-8) 0 var(--convai-space-20);
+
+  border-radius: calc(var(--va-crop-bar-height) / 2);
+  box-shadow: inset 0 0 0 1px var(--convai-edge-island);
+  background: var(--convai-surface-island);
+  pointer-events: auto;
+}
+
+.va-crop__bar .convai-button {
+  flex: none;
+}
+
+.va-crop__line {
+  margin: 0 var(--convai-space-8) 0 0;
+  text-align: right;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-row);
+  white-space: nowrap;
+}
+
+.convai-high-contrast .va-crop__line {
+  color: var(--convai-text-primary);
+}
+
+.va-crop__room {
+  position: absolute;
+}
+
+/* The share's whole picture, where the preview stands: radius 10 and the preview's 1 px ring. */
+.va-crop__frame {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px var(--va-preview-ring);
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.va-crop__frame[data-waiting] {
+  cursor: default;
+}
+
+.va-crop__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+/* Outside the area dims to 55 %, inside the picture only. */
+.va-crop__area {
+  position: absolute;
+  border-radius: 4px;
+  box-shadow: 0 0 0 9999px var(--va-crop-dim);
+  pointer-events: none;
+}
+
+/* The edge: mint 2 px, with the edge.onLight hairline outside it, so it holds on any picture. */
+.va-crop__edge {
+  position: absolute;
+  box-sizing: border-box;
+  border-radius: 7px;
+  box-shadow:
+    inset 0 0 0 1px var(--convai-edge-onlight),
+    inset 0 0 0 3px var(--convai-accent-share);
+  pointer-events: none;
+}
+
+.va-crop__handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: var(--convai-text-primary);
+  box-shadow: 0 0 0 1px var(--convai-edge-onlight);
+  pointer-events: none;
+}
+
+.convai-high-contrast .va-crop__handle {
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  box-shadow: 0 0 0 2px var(--convai-scrim-black);
+}
+
+/* The readout, in the surface's pixels: the Island's chip, 28 high. */
+.va-crop__readout {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 28px;
+  margin: 0;
+  padding: 0 var(--convai-space-12);
+  border: 1px solid var(--convai-edge-island);
+  border-radius: 14px;
+  background: var(--convai-surface-island);
+  color: var(--convai-text-primary);
+  font-size: var(--convai-size-meta);
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Before the share's first picture: the loader on the stage's own ground, and what is waited for. */
+.va-crop__waiting {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--convai-space-12);
+  background: var(--va-surface-stage);
+}
+
+.va-crop__waiting-title {
+  margin: 0;
+  color: var(--convai-text-primary);
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.va-crop__waiting-line {
+  margin: 0;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  line-height: 1.45;
+}
+
+/* In a Windows contrast theme the marks keep their own colors: they are drawn over a picture, not
+   over the page's text, and without them the area cannot be seen. */
+@media (forced-colors: active) {
+  .va-crop__area,
+  .va-crop__edge,
+  .va-crop__handle,
+  .va-crop__readout {
+    forced-color-adjust: none;
+  }
+
+  /* Forced colors drop inset shadows: the pill and the crop bar keep their edges, the paused ring
+     its ring. */
+  .va-paused__pill,
+  .va-crop__bar {
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+
+  .va-chip__slot[data-mark='paused'] .va-chip__dot {
+    outline: 1.5px solid CanvasText;
+    outline-offset: -1.5px;
+  }
+
+  /* The menus' edges are shadows, which forced colors drop: a border stands in, inside the source
+     menu's own 1 px so its rows keep their place. */
+  .va-menu {
+    border: 1px solid CanvasText;
+  }
+
+  .va-source-menu {
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+
+  /* Highlight, as the browser draws a focused control's ring: a ring's own color would be text. */
+  .va-composer:focus-within {
+    outline: var(--convai-focus-width) solid Highlight;
+    outline-offset: var(--convai-focus-gap);
+  }
+}
+
+/* While an area is chosen the Island stands 12 under the title bar, the bar 12 under it (15b, 2). */
+.va-stage__island[data-crop] {
+  top: var(--convai-space-12);
+}
+
+.va-camera {
+  position: absolute;
+  inset: 0;
+}
+
+.va-camera__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.va-camera__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--va-camera-scrim);
+  pointer-events: none;
+}
+
+.va-camera__corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  box-sizing: border-box;
+  border: 0 solid var(--va-viewfinder);
+}
+
+.va-camera__corner--tl {
+  top: var(--convai-space-24);
+  left: var(--convai-space-24);
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+  border-top-left-radius: 6px;
+}
+
+.va-camera__corner--tr {
+  top: var(--convai-space-24);
+  right: var(--convai-space-24);
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+  border-top-right-radius: 6px;
+}
+
+.va-camera__corner--bl {
+  bottom: var(--convai-space-24);
+  left: var(--convai-space-24);
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+  border-bottom-left-radius: 6px;
+}
+
+.va-camera__corner--br {
+  right: var(--convai-space-24);
+  bottom: var(--convai-space-24);
+  border-right-width: 1.5px;
+  border-bottom-width: 1.5px;
+  border-bottom-right-radius: 6px;
+}
+
+.va-preview {
+  position: absolute;
+  pointer-events: none;
+}
+
+.va-preview__frame {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px var(--va-preview-ring);
+}
+
+.va-preview__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.va-preview__line {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  height: 24px;
+  margin: 0;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.va-paused {
+  position: absolute;
+  inset: 0;
+  background: var(--va-paused-veil);
+}
+
+.va-paused--frame {
+  border-radius: inherit;
+}
+
+.va-paused--stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--va-free-right) 0 0;
+}
+
+.va-paused__anchor {
+  position: absolute;
+  width: 0;
+  height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.va-paused__pill {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  height: calc(44px * var(--convai-text-scale));
+  padding: 0 6px 0 var(--convai-space-16);
+  border-radius: var(--convai-radius-capsule);
+  background: var(--convai-surface-island);
+  box-shadow: inset 0 0 0 1px var(--convai-edge-island);
+  color: var(--convai-text-primary);
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: auto;
+}
+
+/* 16 between the words and Resume: the gap's 10 and 6 more. */
+.va-paused__pill .convai-tooltip-anchor {
+  margin-left: 6px;
+}
+
+.va-drop {
+  position: absolute;
+  inset: var(--convai-space-16);
+
+  right: calc(var(--convai-space-16) + var(--va-free-right));
+
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 var(--convai-space-24);
+  border: 2px dashed var(--convai-accent-share);
+  border-radius: 16px;
+  background: var(--va-drop-veil);
+  text-align: center;
+  pointer-events: none;
+}
+
+.va-drop p {
+  margin: 0;
+}
+
+.va-drop__glyph {
+  flex: none;
+  fill: none;
+  stroke: var(--convai-accent-share);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.va-drop__title {
+  font-size: var(--convai-size-caption);
+  font-weight: 600;
+  line-height: 1.2;
+
+  letter-spacing: -0.01em;
+}
+
+.va-drop__line {
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-row);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.va-share-card {
+  width: 440px;
+}
+
+.va-share-card__steps {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--convai-radius-m);
+  background: var(--convai-fill);
+  list-style: none;
+}
+
+.va-share-card__step {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-12);
+  min-height: 44px;
+  padding: 0 var(--convai-space-16);
+  color: var(--convai-text-primary);
+  font-size: var(--convai-size-body);
+  line-height: 1.3;
+}
+
+/* The rule between the steps starts under the words, 44 in. */
+.va-share-card__step + .va-share-card__step {
+  background: linear-gradient(var(--convai-edge), var(--convai-edge)) 44px 0 / calc(100% - 44px) 1px
+    no-repeat;
+}
+
+.va-share-card__number {
+  flex: none;
+  width: 16px;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+}
+
+.va-launch {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--convai-space-24);
+  padding: 0 var(--convai-space-48);
+  background: radial-gradient(
+    120% 90% at 50% 40%,
+    var(--va-launch-light) 0%,
+    var(--convai-surface-ground) 75%
+  );
+  text-align: center;
+}
+
+.va-launch__words {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.va-launch__words[data-shown='false'] {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.va-launch__words[data-shown='true'] {
+  transition: opacity var(--convai-motion-standard) linear;
+}
+
+.va-launch .convai-button--large {
+  --convai-control-height: 44px;
+  padding: 0 24px;
+}
+
+/* A long name breaks rather than run off the stage. */
+.va-launch__title,
+.va-launch__title--large,
+.va-launch__title--name {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.va-launch__title {
+  font-size: var(--convai-size-heading);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-variation-settings: 'opsz' 17;
+}
+
+.va-launch__title--large {
+  font-size: var(--convai-size-caption);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-variation-settings: 'opsz' 22;
+}
+
+.va-launch__body {
+  max-width: 400px;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-body);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.va-launch__portrait {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 70%;
+  overflow: hidden;
+  opacity: 0.4;
+}
+
+.va-launch__portrait .va-portrait {
+  object-position: 50% 20%;
+}
+
+.va-launch__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--va-portrait-fade) 0%, var(--convai-surface-ground) 70%);
+}
+
+.va-launch__words--switching {
+  margin-top: 200px;
+}
+
+.va-launch__kicker {
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-micro);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* The name at 34 (no kit size): the display steps' rule, scaled with the text. */
+.va-launch__title--name {
+  font-size: max(11px, calc(34px * var(--convai-text-scale)));
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-variation-settings: 'opsz' 32;
+}
+
+/* The Island: 16 from the stage's top, 12 beside a floating panel, centred in what it leaves. */
+.va-stage__island {
+  position: absolute;
+  top: var(--convai-space-16);
+  right: var(--va-free-right);
+  left: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.va-stage__island[data-place='float'] {
+  top: var(--convai-space-12);
+}
+
+.va-stage__island .convai-island__surface {
+  pointer-events: auto;
+}
+
+.va-stage__controls {
+  position: absolute;
+  right: var(--va-free-right);
+  bottom: var(--convai-space-24);
+  left: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 var(--convai-space-24);
+}
+
+.va-stage__controls .convai-capsule--compact {
+  width: auto;
+  max-width: min(360px, 100%);
+}
+
+.va-stage__controls[data-place='sheet'] {
+  padding: 0 28px;
+}
+
+.va-stage__controls[data-place='sheet'] .convai-capsule,
+.va-stage__controls[data-place='sheet'] .va-composer-stack,
+.va-stage__controls[data-place='sheet'] .va-composer {
+  width: 100%;
+}
+
+.va-captions {
+  position: absolute;
+  bottom: calc(var(--convai-space-24) + 64px * var(--convai-text-scale) + var(--convai-space-16));
+  left: calc((100% - var(--va-free-right)) / 2);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--convai-space-8);
+  width: 100%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.va-captions__question {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--va-text-72);
+  font-size: var(--convai-size-heading);
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  font-variation-settings: 'opsz' 17;
+}
+
+.va-captions__answer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: var(--convai-size-caption);
+  font-weight: 600;
+  line-height: 1.3;
+  font-variation-settings: 'opsz' 22;
+  animation: va-fade-in var(--convai-motion-crossfade) linear;
+}
+
+.va-captions__line {
+  white-space: nowrap;
+}
+
+.va-captions__stopped {
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+}
+
+.va-continuum__veil {
+  position: absolute;
+  inset: 0;
+  background: var(--va-continuum-veil);
+}
+
+.va-continuum__turns {
+  position: absolute;
+  inset: 0 var(--convai-space-48) 116px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 18px;
+  mask-image: linear-gradient(180deg, transparent 0, black 25%);
+}
+
+.va-continuum__turn {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Each size at its own optical size, as the kit's text draws (the app's text turns it off). */
+.va-continuum__question {
+  overflow-wrap: anywhere;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-heading);
+  font-weight: 600;
+  line-height: normal;
+  font-variation-settings: 'opsz' 17;
+}
+
+.va-continuum__answer {
+  overflow-wrap: anywhere;
+  font-size: var(--convai-size-caption);
+  font-weight: 600;
+  line-height: normal;
+  text-wrap: pretty;
+  font-variation-settings: 'opsz' 22;
+}
+
+.va-continuum__turn[data-older] .va-continuum__question {
+  font-size: var(--convai-size-body);
+  font-variation-settings: 'opsz' 15;
+}
+
+.va-continuum__turn[data-older] .va-continuum__answer {
+  opacity: 0.8;
+  font-size: var(--convai-size-heading);
+  font-variation-settings: 'opsz' 17;
+}
+
+.va-ask {
+  position: relative;
+  box-sizing: border-box;
+  width: 380px;
+  max-width: 100%;
+  margin-bottom: var(--convai-space-24);
+  padding: var(--convai-space-16);
+  border: 1px solid var(--convai-edge-island);
+  border-radius: 20px;
+  background: var(--convai-surface-island);
+  box-shadow: 0 12px 32px var(--convai-shadow-soft);
+}
+
+.va-ask__who {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-8);
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+}
+
+.va-ask__title {
+  margin-top: var(--convai-space-12) !important;
+  font-size: var(--convai-size-heading);
+  font-weight: 600;
+  font-variation-settings: 'opsz' 17;
+}
+
+.va-ask__body {
+  margin-top: var(--convai-space-4) !important;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.va-ask__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--convai-space-8);
+  margin-top: var(--convai-space-16);
+}
+
+.va-ask__actions .convai-button {
+  width: 100%;
+}
+
+.va-ask__tether {
+  position: absolute;
+  bottom: calc(-1 * var(--convai-space-24) - 1px);
+  left: 50%;
+  width: 1px;
+  height: var(--convai-space-24);
+  background: var(--convai-edge-island);
+}
+
+.va-composer-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-8);
+  width: 560px;
+  max-width: 100%;
+}
+
+.va-composer__note {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-8);
+  margin: 0;
+  padding: 0 var(--convai-space-20);
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+  line-height: 1.4;
+}
+
+.va-dot--warn {
+  background: var(--convai-warn);
+}
+
+.va-composer__line {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-8);
+  margin: 0;
+  padding: 0 var(--convai-space-20);
+  color: var(--va-text-72);
+  font-size: var(--convai-size-meta);
+  line-height: 1.4;
+}
+
+/* The kit's desktop composer: 64 at rest, padding 12 12 12 10, radius 32 kept as it grows, the
+   island surface and edge. No shadow and no ring of its own: the frames keep the island edge while
+   the field has the focus, and its caret shows where typing goes. */
+.va-composer {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 560px;
+  max-width: 100%;
+  min-height: 64px;
+  padding: var(--convai-space-12) var(--convai-space-12) var(--convai-space-12) 10px;
+  border: 1px solid var(--convai-edge-island);
+  border-radius: 32px;
+  background: var(--convai-surface-island);
+}
+
+.va-composer__field:focus-visible {
+  outline: none;
+}
+
+.va-composer__send svg {
+  stroke-width: 1.8;
+}
+
+.va-composer .va-composer__send--sending,
+.va-composer .va-composer__send--sending:hover,
+.va-composer .va-composer__send--sending:active {
+  background: var(--convai-fill-emphasis);
+  box-shadow: none;
+  scale: 1;
+  cursor: default;
+}
+
+.va-composer__send--sending > .convai-button__content {
+  opacity: 0;
+}
+
+.va-composer__loader {
+  position: absolute;
+  right: var(--convai-space-20);
+  bottom: var(--convai-space-20);
+  pointer-events: none;
+}
+
+.va-composer__lens {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+
+.va-composer__field {
+  flex: 1;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 40px;
+  padding: 10px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-body);
+  line-height: normal;
+  resize: none;
+}
+
+.va-composer__field::placeholder {
+  color: var(--convai-text-secondary);
+}
+
+.va-composer[data-send='sending'] .va-composer__field {
+  color: var(--convai-text-secondary);
+}
+
+.va-composer__field[data-over] {
+  mask-image: linear-gradient(transparent, black 18px);
+}
+
+.va-transcript {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: var(--convai-radius-l);
+  background: var(--convai-surface-sheet);
+}
+
+.va-transcript--pinned {
+  position: relative;
+  border: 1px solid var(--convai-edge);
+}
+
+.va-transcript--float {
+  position: absolute;
+  top: var(--convai-space-12);
+  right: var(--convai-space-12);
+  bottom: var(--convai-space-24);
+  z-index: 4;
+  box-shadow:
+    inset 0 0 0 1px var(--convai-edge),
+    0 12px 32px var(--va-shadow-popover);
+}
+
+.va-transcript--sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  box-shadow: inset 0 0 0 1px var(--convai-edge);
+}
+
+.va-stage:has(> .va-transcript--sheet) .va-camera {
+  visibility: hidden;
+}
+
+.va-transcript__header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 var(--convai-space-8) 0 var(--convai-space-16);
+
+  box-shadow: inset 0 -1px 0 var(--convai-edge);
+}
+
+.va-transcript__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+
+  font-size: var(--convai-size-row);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.va-menu-anchor {
+  position: relative;
+  flex: none;
+}
+
+.va-transcript__style {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 var(--convai-space-8) 0 10px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--convai-fill-emphasis);
+  box-shadow: inset 0 0 0 1px var(--convai-edge-button);
+  color: var(--convai-text-primary);
+  font: inherit;
+
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.va-transcript__style:hover {
+  background: var(--convai-fill-selected);
+}
+
+.va-transcript__style[aria-expanded='true'] {
+  background: var(--convai-fill-selected);
+}
+
+.va-transcript__chevron {
+  transform: rotate(90deg);
+}
+
+.va-menu {
+  position: absolute;
+  top: 34px;
+  right: 0;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 200px;
+  padding: 6px;
+  border-radius: var(--convai-radius-m);
+
+  background:
+    linear-gradient(var(--convai-surface-menu), var(--convai-surface-menu)),
+    var(--convai-surface-ground);
+  box-shadow:
+    0 0 0 1px var(--convai-edge),
+    0 16px 48px var(--convai-shadow-soft);
+}
+
+.va-menu__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-row);
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The highlight is fill.pressed, and keyboard focus adds the ring inside the row (0.41.0). */
+.va-menu__row:hover,
+.va-menu__row:focus-visible {
+  background: var(--convai-fill-pressed);
+}
+
+.va-menu__row:focus-visible {
+  outline-offset: calc(-1 * var(--convai-focus-width));
+}
+
+.va-transcript__list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  outline: none;
+  mask-image: linear-gradient(180deg, transparent 0, black 24px);
+}
+
+/* The list starts at its end: short conversations sit at the bottom. */
+.va-transcript__list > :first-child {
+  margin-top: auto;
+}
+
+.va-transcript__list--moments {
+  gap: var(--convai-space-16);
+
+  padding: var(--convai-space-8) var(--convai-space-16) var(--convai-space-16);
+}
+
+.va-transcript__list--conversation {
+  gap: var(--convai-space-16);
+  padding: var(--convai-space-8) var(--convai-space-16) var(--convai-space-16);
+}
+
+/* Over a sheet the capsule stands at the bottom: the list keeps clear of it. */
+.va-transcript--sheet .va-transcript__list {
+  padding-bottom: calc(112px + var(--convai-space-16));
+}
+
+.va-transcript__empty {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--convai-space-24) var(--convai-space-16);
+  text-align: center;
+  hyphens: manual;
+}
+
+.va-transcript__empty-title {
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.va-transcript__divider {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-12);
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+}
+
+.va-transcript__divider::before,
+.va-transcript__divider::after {
+  flex: 1;
+  height: 1px;
+  background: var(--convai-edge);
+  content: '';
+}
+
+.va-transcript__new {
+  position: absolute;
+  bottom: var(--convai-space-16);
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-8);
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--convai-edge-island);
+  border-radius: 18px;
+  background: var(--convai-surface-island);
+  box-shadow: 0 12px 32px var(--convai-shadow-soft);
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.va-transcript--sheet .va-transcript__new {
+  bottom: 112px;
+}
+
+.va-moment {
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-16);
+}
+
+.va-moment__row {
+  display: flex;
+  gap: var(--convai-space-12);
+}
+
+/* "Stopped" under the moment, 16 below it at the list's left: 12 text.tertiary (kit
+   .cv-tx__mstopped: the moment's 12 gap and 4 more). */
+.va-moment__stopped {
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+  line-height: 1;
+}
+
+.va-moment__picture {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+  width: 64px;
+  height: 40px;
+  border-radius: var(--convai-radius-xs);
+  background: var(--convai-fill);
+}
+
+.va-moment__picture::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--convai-edge);
+  content: '';
+}
+
+.va-moment__picture img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.va-moment__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--convai-space-4);
+  min-width: 0;
+}
+
+/* Earlier moments step back: their picture and question at 80 %; meta and answer stay whole (AA). */
+.va-moment:not(:last-child) .va-moment__picture,
+.va-moment:not(:last-child) .va-moment__text {
+  opacity: 0.8;
+}
+
+.va-moment__question {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.va-moment__meta {
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+  line-height: 1;
+}
+
+.va-moment__text {
+  overflow-wrap: anywhere;
+  color: var(--convai-text-primary);
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.va-moment__reply .va-turn__reply {
+  color: var(--convai-text-secondary);
+  line-height: 1.3;
+}
+
+.va-turn__reply {
+  font-size: var(--convai-size-body);
+  line-height: 1.5;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.va-turn__caret {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  margin-left: 3px;
+  border-radius: 2px;
+  background: var(--convai-text-secondary);
+  vertical-align: -2px;
+}
+
+.va-turn__stopped {
+  margin-top: var(--convai-space-8) !important;
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+  line-height: 1;
+}
+
+.va-turn__waiting {
+  display: flex;
+  height: 24px;
+}
+
+/* A turn that could not be answered: dot, line, Try again 32 (kit .cv-tx__mfail: 13/1.3 at 72 %). */
+.va-moment__failed {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--va-text-72);
+  font-size: var(--convai-size-control);
+  line-height: 1.3;
+}
+
+.va-moment__failed {
+  margin-top: calc(-1 * var(--convai-space-4));
+}
+
+.va-bubbles__failed {
+  display: flex;
+  flex-direction: column;
+}
+
+.va-bubble--failed {
+  margin: 0;
+  color: var(--convai-text-secondary);
+}
+
+.va-bubbles__again {
+  align-self: flex-start;
+  min-height: 48px;
+  margin: 0 0 0 36px;
+  padding: 0 var(--convai-space-4);
+  border: 0;
+  background: none;
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+  line-height: 1.21;
+  cursor: pointer;
+}
+
+.va-turn__failed-line {
+  flex: 1;
+}
+
+.va-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.va-dot--danger {
+  background: var(--convai-danger-fill);
+}
+
+.va-bubbles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-16);
+}
+
+.va-bubble {
+  box-sizing: border-box;
+  padding: 9px 12px;
+  font-size: var(--convai-size-body);
+  line-height: normal;
+  overflow-wrap: anywhere;
+}
+
+.va-bubble--you {
+  align-self: flex-end;
+  max-width: 78%;
+  border-radius: 16px 16px 4px;
+  background: var(--convai-accent-user);
+  color: var(--convai-accent-user-text);
+}
+
+.va-bubbles__reply {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--convai-space-8);
+}
+
+.va-bubble--character {
+  max-width: min(260px, calc(100% - 36px));
+  border-radius: 16px 16px 16px 4px;
+  background: var(--convai-surface-bubble);
+}
+
+.va-bubble--character .va-turn__reply {
+  line-height: normal;
+}
+
+@keyframes va-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.convai-reduce-motion .va-captions__answer {
+  animation: none;
+}
+
+/* The controls take the focus only to hold it after a send; they draw no ring of their own. */
+.va-stage__controls:focus {
+  outline: none;
+}
+
+/* Forced colors, after the rules they outweigh: the bar's chips and the style trigger keep an edge,
+   and an open one shows the system highlight, as a pressed tool does. */
+@media (forced-colors: active) {
+  .va-bar__character,
+  .va-chip,
+  .va-transcript__style {
+    border: 1px solid ButtonText;
+  }
+
+  /* The inert "Choosing an area" chip is no control: Canvas survives where transparent is forced. */
+  .va-chip--passive {
+    border-color: Canvas;
+  }
+
+  .va-bar__character[aria-expanded='true'],
+  .va-chip[data-open],
+  .va-transcript__style[aria-expanded='true'] {
+    border-color: Highlight;
+    background: Highlight;
+  }
+
+  /* Drawn as is, words and all: a name in text.secondary would stand 1.2:1 on the highlight. */
+  .va-bar__character[aria-expanded='true'],
+  .va-bar__character[aria-expanded='true'] *,
+  .va-chip[data-open],
+  .va-chip[data-open] *,
+  .va-transcript__style[aria-expanded='true'],
+  .va-transcript__style[aria-expanded='true'] * {
+    forced-color-adjust: none;
+    opacity: 1;
+    color: HighlightText;
+  }
+}

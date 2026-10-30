@@ -1,0 +1,429 @@
+.convai-button {
+  --convai-control-height: 32px;
+  --convai-control-gain: 1;
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: calc(
+    var(--convai-control-height) * (1 + (var(--convai-text-scale) - 1) * var(--convai-control-gain))
+  );
+  margin: 0;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--convai-radius-s);
+  background-color: transparent;
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition-property: background-color, box-shadow, scale;
+  transition-duration: var(--convai-motion-fast);
+  transition-timing-function: var(--convai-motion-ease);
+}
+
+/* Every control takes a press over 44 where the room allows : an invisible pad
+   that reaches past each side by half of what the button lacks. */
+.convai-button::before {
+  position: absolute;
+  inset: min(0px, calc((100% - var(--convai-target)) / 2));
+  content: '';
+}
+
+.convai-button.convai-disabled::before {
+  content: none;
+}
+
+.convai-button__content {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.convai-button__icon {
+  flex: none;
+}
+
+/* Primary: accent.user. Hover is the fill at 90 % as a color, since an opacity would fade the label. */
+.convai-button--primary {
+  background-color: var(--convai-accent-user);
+  color: var(--convai-accent-user-text);
+}
+
+.convai-button--primary:hover,
+.convai-button--primary.convai-state-hover {
+  background-color: var(--convai-accent-user-hover);
+}
+
+.convai-button--primary:active,
+.convai-button--primary.convai-state-pressed {
+  background-color: var(--convai-accent-user-pressed);
+  scale: 0.98;
+}
+
+/* Secondary: fill.emphasis and a 1 px edge.button just inside its outline. */
+.convai-button--secondary {
+  background-color: var(--convai-fill-emphasis);
+  box-shadow: inset 0 0 0 1px var(--convai-edge-button);
+}
+
+/* Hover adds fill.hover on top of whatever fill the control has. */
+.convai-button--secondary:hover,
+.convai-button--text:hover,
+.convai-button--secondary.convai-state-hover,
+.convai-button--text.convai-state-hover {
+  background-image: linear-gradient(var(--convai-fill-hover), var(--convai-fill-hover));
+}
+
+.convai-button--secondary:active,
+.convai-button--text:active,
+.convai-button--secondary.convai-state-pressed,
+.convai-button--text.convai-state-pressed {
+  background-color: var(--convai-fill-pressed);
+  background-image: none;
+  scale: 0.98;
+}
+
+.convai-button--text {
+  padding: 0 10px;
+}
+
+.convai-button--danger {
+  color: var(--convai-danger-text);
+}
+
+.convai-button--small {
+  --convai-control-height: 28px;
+  --convai-control-gain: 0.67;
+  padding: 0 12px;
+}
+
+.convai-button--medium {
+  --convai-control-height: 36px;
+}
+
+.convai-button--large {
+  --convai-control-height: 40px;
+  padding: 0 18px;
+}
+
+/* Size L : 48 high, always a capsule, label 16 / 600. */
+.convai-button--extra-large {
+  --convai-control-height: 48px;
+  padding: 0 28px;
+  font-size: max(11px, calc(16px * var(--convai-text-scale)));
+}
+
+.convai-button--capsule {
+  border-radius: var(--convai-radius-capsule);
+}
+
+/* Capsule tools: no fill until hover, the glyph in text.secondary. */
+.convai-button--tool {
+  color: var(--convai-text-secondary);
+}
+
+.convai-button--tool:hover,
+.convai-button--tool.convai-state-hover {
+  color: var(--convai-text-primary);
+}
+
+/* Working: the words keep their room, so nothing moves, and stay the button's name for a screen reader
+   (an opacity, not visibility, which would take the name away); the spinner takes their place. */
+.convai-button--loading {
+  cursor: default;
+}
+
+.convai-button--loading > .convai-button__content {
+  opacity: 0;
+}
+
+.convai-button__spinner {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+}
+
+.convai-button--loading:hover,
+.convai-button--loading:active {
+  background-image: none;
+  scale: 1;
+}
+
+.convai-button--primary.convai-button--loading:hover,
+.convai-button--primary.convai-button--loading:active {
+  background-color: var(--convai-accent-user);
+}
+
+.convai-button--secondary.convai-button--loading:active {
+  background-color: var(--convai-fill-emphasis);
+}
+
+.convai-button--text.convai-button--loading:active {
+  background-color: transparent;
+}
+
+.convai-button.convai-disabled {
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  color: var(--convai-text-disabled);
+  scale: 1;
+  cursor: default;
+}
+
+.convai-button--primary.convai-disabled,
+.convai-button--secondary.convai-disabled {
+  box-shadow: inset 0 0 0 1px var(--convai-edge-disabled);
+}
+
+/* convai-state-hover, -pressed and -focus draw a state without the pointer or the keyboard: for the
+   gallery, captures and tests. */
+.convai-theme .convai-state-focus {
+  outline: var(--convai-focus-width) solid var(--convai-focus-ring);
+  outline-offset: var(--convai-focus-gap);
+}
+
+/* ---- Icon buttons: a square or a circle of the button's height, never grown by text size ---------- */
+
+.convai-icon-button {
+  --convai-control-gain: 0;
+  width: var(--convai-control-height);
+  padding: 0;
+}
+
+.convai-icon-button--small {
+  --convai-control-height: 28px;
+}
+
+.convai-icon-button--large {
+  --convai-control-height: 40px;
+}
+
+.convai-icon-button--round {
+  border-radius: var(--convai-radius-capsule);
+}
+
+.convai-icon-button.convai-button--secondary[aria-pressed='true'],
+.convai-icon-button.convai-button--text[aria-pressed='true'] {
+  background-color: var(--convai-fill-selected);
+}
+
+.convai-button--tool[aria-pressed='true'] {
+  color: var(--convai-text-primary);
+}
+
+.convai-button--tool[aria-expanded='true'] {
+  background-color: var(--convai-fill-selected);
+  color: var(--convai-text-primary);
+}
+
+.convai-icon-button.convai-disabled[aria-pressed='true'] {
+  background-color: var(--convai-fill-selected-disabled);
+}
+
+.convai-high-contrast .convai-icon-button[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 1px var(--convai-edge-strong);
+}
+
+/* Forced colors (Windows contrast themes) drop fills and inset edges: a button keeps a border in
+   the system's colors, and a disabled one is GrayText. */
+@media (forced-colors: active) {
+  .convai-button {
+    border: 1px solid ButtonText;
+  }
+
+  .convai-button.convai-disabled {
+    border-color: GrayText;
+    color: GrayText;
+  }
+
+  /* The first choice of a row keeps its weight: a fill alone would read as its neighbour. */
+  .convai-button--primary {
+    border-width: 2px;
+  }
+
+  /* Pressed, or with its panel open: the system highlight, drawn as is (no plate behind its glyph). */
+  .convai-icon-button[aria-pressed='true']:not(.convai-disabled),
+  .convai-button--tool[aria-expanded='true'] {
+    forced-color-adjust: none;
+    border-color: Highlight;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+
+  /* An icon that sets its own color keeps it here (an svg preserves its color): it takes its text's.
+     Gray icons became #7B7C7D on black and all but white on white. */
+  svg[class] {
+    color: inherit;
+  }
+
+  .convai-key-cap {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* ---- Key caps: one key as a cap; in a button it takes the button's size and kind ----------------- */
+
+.convai-key-cap {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: calc(20px * var(--convai-text-scale));
+  min-width: calc(20px * var(--convai-text-scale));
+  padding: 0 6px;
+  border-radius: var(--convai-radius-xs);
+  background-color: var(--convai-fill-emphasis);
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-micro);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* In a button: 8 after the words, and the button ends as far after the cap as the cap stands from
+   its top . */
+.convai-button > .convai-button__content > .convai-key-cap {
+  margin-left: 2px;
+}
+
+.convai-button--with-key-cap {
+  padding-right: 6px;
+}
+
+.convai-button--medium.convai-button--with-key-cap,
+.convai-button--large.convai-button--with-key-cap {
+  padding-right: 8px;
+}
+
+.convai-button--large .convai-key-cap {
+  height: calc(24px * var(--convai-text-scale));
+  min-width: calc(24px * var(--convai-text-scale));
+}
+
+.convai-button--small .convai-key-cap {
+  height: calc(16px * var(--convai-text-scale));
+  min-width: calc(16px * var(--convai-text-scale));
+  font-size: max(10px, calc(10px * var(--convai-text-scale)));
+}
+
+.convai-button--small .convai-key-cap--single {
+  padding: 0;
+}
+
+/* On accent.user the cap is the button's ink at the key cap's share. */
+.convai-button--primary .convai-key-cap {
+  background-color: var(--convai-accent-user-key);
+  color: var(--convai-accent-user-text);
+}
+
+/* On a filled button: an edge, not a fill, so the cap keeps its shape at any fill of the button. */
+.convai-button--secondary .convai-key-cap {
+  padding: 0 5px;
+  border: 1px solid var(--convai-edge-key);
+  background-color: transparent;
+}
+
+/* A dimmed button's cap is dimmed with it: no fill, no edge, text.disabled. */
+.convai-button.convai-disabled .convai-key-cap {
+  padding: 0 6px;
+  border: 0;
+  background-color: transparent;
+  color: var(--convai-text-disabled);
+}
+
+/* ---- Spinner: a 90° arc over a 25 % ring, one turn per 0.9 s; held as a 60 % ring under Reduce Motion */
+
+.convai-spinner {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.convai-spinner__ring {
+  opacity: 0.25;
+}
+
+.convai-spinner__arc {
+  stroke-linecap: round;
+  transform-origin: 8px 8px;
+  transform: rotate(-90deg);
+  animation: convai-spin 0.9s linear infinite;
+}
+
+@keyframes convai-spin {
+  to {
+    transform: rotate(270deg);
+  }
+}
+
+.convai-reduce-motion .convai-spinner__ring {
+  opacity: 0.6;
+}
+
+.convai-reduce-motion .convai-spinner__arc {
+  display: none;
+}
+
+.convai-tooltip-anchor {
+  display: inline-flex;
+}
+
+.convai-tooltip {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  max-width: 280px;
+  height: calc(24px * var(--convai-text-scale));
+  padding: 0 8px;
+  border: 1px solid var(--convai-edge-strong);
+  border-radius: var(--convai-radius-xs);
+
+  background:
+    linear-gradient(var(--convai-surface-menu), var(--convai-surface-menu)),
+    var(--convai-surface-ground);
+  color: var(--convai-text-primary);
+  font-size: var(--convai-size-meta);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.convai-tooltip__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* text.secondary: tertiary on surface.menu is 4.3:1, under the 4.5 small text needs. */
+.convai-tooltip__shortcut {
+  flex-shrink: 0;
+  margin-left: 8px;
+  color: var(--convai-text-secondary);
+}
+
+/* The full text of a cut label wraps, and ends after three lines. */
+.convai-tooltip--text {
+  height: auto;
+  min-height: calc(24px * var(--convai-text-scale));
+  padding: 3px 8px;
+  white-space: normal;
+}
+
+.convai-tooltip--text > .convai-tooltip__name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}

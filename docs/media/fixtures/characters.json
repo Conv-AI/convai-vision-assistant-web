@@ -1,0 +1,50 @@
+[
+  {
+    "id": "readme-character-1",
+    "name": "Aria Sentinel",
+    "languages": ["en-US"],
+    "portrait": "https://readme-assets.invalid/character-1.webp",
+    "portraitFull": "https://readme-assets.invalid/character-1-full.webp",
+    "background": "https://readme-assets.invalid/character-1-background.webp"
+  },
+  {
+    "id": "readme-character-2",
+    "name": "Professor Huxley Finch",
+    "languages": ["en-US"],
+    "portrait": "https://readme-assets.invalid/character-2.webp",
+    "portraitFull": "https://readme-assets.invalid/character-2-full.webp",
+    "background": "https://readme-assets.invalid/character-2-background.webp"
+  },
+  {
+    "id": "readme-character-3",
+    "name": "Dr. Elian Moreau",
+    "languages": ["en-US"],
+    "portrait": "https://readme-assets.invalid/character-3.webp",
+    "portraitFull": "https://readme-assets.invalid/character-3-full.webp",
+    "background": "https://readme-assets.invalid/character-3-background.webp"
+  },
+  {
+    "id": "readme-character-4",
+    "name": "Ava Meridian",
+    "languages": ["en-US"],
+    "portrait": "https://readme-assets.invalid/character-4.webp",
+    "portraitFull": "https://readme-assets.invalid/character-4-full.webp",
+    "background": "https://readme-assets.invalid/character-4-background.webp"
+  },
+  {
+    "id": "readme-character-5",
+    "name": "Naomi Chen",
+    "languages": ["en-US"],
+    "portrait": "https://readme-assets.invalid/character-5.webp",
+    "portraitFull": "https://readme-assets.invalid/character-5-full.webp",
+    "background": "https://readme-assets.invalid/character-5-background.webp"
+  },
+  {
+    "id": "readme-character-6",
+    "name": "Samir Patel",
+    "languages": ["en-US"],
+    "portrait": "https://readme-assets.invalid/character-6.webp",
+    "portraitFull": "https://readme-assets.invalid/character-6-full.webp",
+    "background": "https://readme-assets.invalid/character-6-background.webp"
+  }
+]

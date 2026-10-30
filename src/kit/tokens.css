@@ -1,0 +1,191 @@
+/* Inter in one file per script: a page fetches only those whose letters it shows. */
+@import './fonts/inter.css';
+
+.convai-theme {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --convai-surface-ground: #0a0a0c;
+  --convai-surface-sheet: #17171a;
+  --convai-surface-sidebar: #121214;
+  --convai-surface-island: #050506;
+  --convai-edge-island: #26262b;
+  --convai-surface-material: rgba(28, 28, 30, 0.94);
+  --convai-surface-menu: rgba(44, 44, 46, 0.96);
+  --convai-surface-bubble: #26262a;
+  --convai-scrim: rgba(0, 0, 0, 0.55);
+  --convai-scrim-black: #000000;
+  --convai-shadow-soft: rgba(0, 0, 0, 0.5);
+  --convai-edge-onlight: rgba(0, 0, 0, 0.4);
+  /* Derived: fill.emphasis over the sheet, then OKLCH L +0.06 and -0.03. */
+  --convai-portrait-ground: #2a2a2c;
+  --convai-portrait-ground-light: #39393b;
+  --convai-portrait-ground-island: #232325;
+
+  --convai-fill: rgba(255, 255, 255, 0.06);
+  --convai-fill-emphasis: rgba(255, 255, 255, 0.08);
+  --convai-fill-hover: rgba(255, 255, 255, 0.05);
+  --convai-fill-selected: rgba(255, 255, 255, 0.14);
+  --convai-fill-pressed: rgba(255, 255, 255, 0.16);
+  /* Derived: as fill.emphasis. */
+  --convai-fill-highlight: rgba(255, 255, 255, 0.08);
+  --convai-edge: rgba(255, 255, 255, 0.08);
+  --convai-edge-strong: rgba(255, 255, 255, 0.12);
+  /* Derived: edge at twice its alpha; edge.strong at 24 %; edge.strong at 10 %. */
+  --convai-edge-button: rgba(255, 255, 255, 0.16);
+  --convai-edge-key: rgba(255, 255, 255, 0.24);
+  --convai-edge-disabled: rgba(255, 255, 255, 0.1);
+  /* Derived: text.primary at 60 %. */
+  --convai-focus-ring: rgba(246, 248, 250, 0.6);
+  /* Derived: white at 34 % (the least that keeps 3 : 1 on the sheet), and 16 points more. */
+  --convai-scroll-thumb: rgba(255, 255, 255, 0.34);
+  --convai-scroll-thumb-hover: rgba(255, 255, 255, 0.5);
+  --convai-switch-off: rgba(120, 120, 128, 0.36);
+  --convai-switch-on: #22b14c;
+  --convai-switch-knob: #ffffff;
+  /* The knob's edge: none on a dark theme. The Lens's dark ambient glow: on (a light theme turns it off). */
+  --convai-knob-edge: transparent;
+  --convai-lens-ambient: 1;
+
+  --convai-text-primary: #f6f8fa;
+  --convai-text-secondary: rgba(246, 248, 250, 0.62);
+  --convai-text-tertiary: rgba(246, 248, 250, 0.5);
+  /* Derived: the least alpha from 40 % that keeps 3 : 1 on the sheet. */
+  --convai-text-disabled: rgba(246, 248, 250, 0.4);
+
+  /* Accents: meaning, never decoration. */
+  --convai-accent-user: #f6f8fa;
+  --convai-accent-user-text: #0a0a0c;
+  --convai-accent-user-pressed: #dde1e5;
+  --convai-accent-share: #75dba8;
+  --convai-lens-green: #22b14c;
+  --convai-lens-mint: #8febae;
+  --convai-lens-mint-white: #ecfaf1;
+  --convai-lens-ink-muted: #bcc2c6;
+  --convai-lens-glass-inner: #3a3d44;
+  --convai-lens-glass-mid: #1b1c21;
+  --convai-lens-glass-outer: #0b0c0e;
+  --convai-lens-rim: #23252b;
+  --convai-ai-accent: #75dba8;
+  --convai-ai-edge: rgba(117, 219, 168, 0.8);
+  --convai-ai-tint: rgba(117, 219, 168, 0.12);
+  --convai-ai-text: #b9f0d4;
+
+  /* Status */
+  --convai-warn: #e3a33b;
+  --convai-warn-text: #f0c47e;
+  --convai-warn-tint: rgba(227, 163, 59, 0.12);
+  --convai-danger-fill: #ff453a;
+  --convai-danger-fill-button: #d92d20;
+  /* Derived: danger.fill.button with OKLCH L -0.06, away from its light text. */
+  --convai-danger-fill-button-pressed: #c30802;
+  --convai-danger-fill-text: #ffffff;
+  --convai-danger-text: #ff6961;
+  --convai-danger-tint: rgba(255, 69, 58, 0.12);
+
+  /*
+   * State colors a part paints itself (derived). Hover on accent.user is the fill at 90 % over the
+   * sheet; quiet text and a key cap's ground on accent.user are accent.user.text at 66 % and 10 % over
+   * it; a disabled knob is the knob at 40 % over the sheet; a disabled fill is the fill at 40 %.
+   */
+  --convai-accent-user-hover: #e0e1e4;
+  --convai-accent-user-text-quiet: #5a5b5d;
+  --convai-accent-user-key: #dee0e2;
+  --convai-switch-knob-disabled: #747476;
+  --convai-fill-disabled: rgba(255, 255, 255, 0.024);
+  --convai-fill-emphasis-disabled: rgba(255, 255, 255, 0.032);
+  --convai-fill-selected-disabled: rgba(255, 255, 255, 0.056);
+  --convai-switch-off-disabled: rgba(120, 120, 128, 0.144);
+  --convai-switch-on-disabled: rgba(34, 177, 76, 0.4);
+
+  /* Shape. radius.capsule is half the height: any radius past half draws as half. */
+  --convai-radius-xs: 6px;
+  --convai-radius-s: 10px;
+  --convai-radius-m: 14px;
+  --convai-radius-l: 24px;
+  --convai-radius-capsule: 999px;
+  --convai-radius-segment: 7px;
+  --convai-radius-bubble: 16px;
+  --convai-radius-bubble-tail: 4px;
+  --convai-radius-badge: 3px;
+
+  /* Font */
+  --convai-font-ui: Inter, system-ui, sans-serif;
+
+  /* Motion */
+  --convai-motion-ease: cubic-bezier(0.075, 0.82, 0.165, 1);
+  --convai-motion-fast: 150ms;
+  --convai-motion-standard: 200ms;
+  --convai-motion-deliberate: 250ms;
+  --convai-motion-island: 420ms;
+  --convai-motion-island-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --convai-motion-lens: 240ms;
+  --convai-motion-shot: 600ms;
+  --convai-motion-crossfade: 120ms;
+}
+
+/* The character's color: every ai.* token changes as a set. Mint is the default above. */
+.convai-theme.convai-ai--cyan {
+  --convai-ai-accent: #5cc8f0;
+  --convai-ai-edge: rgba(92, 200, 240, 0.8);
+  --convai-ai-tint: rgba(92, 200, 240, 0.12);
+  --convai-ai-text: #aee4f8;
+}
+
+.convai-theme.convai-ai--yellow {
+  --convai-ai-accent: #f2d04b;
+  --convai-ai-edge: rgba(242, 208, 75, 0.8);
+  --convai-ai-tint: rgba(242, 208, 75, 0.12);
+  --convai-ai-text: #f9e8a5;
+}
+
+/*
+ * High contrast: an overlay that raises the translucent tokens; opaque colors and layout stay. Fills
+ * +4 points (selected and pressed +10), edges to 28 % and 50 %, text to 82 / 72 / 52 %, a solid focus
+ * ring, the Island's edge as the raised edge over the Island, and a pressed red that is its rest red
+ * (a 2 px edge marks the press instead).
+ */
+.convai-theme.convai-high-contrast {
+  --convai-edge-island: #4b4b4c;
+  --convai-fill: rgba(255, 255, 255, 0.1);
+  --convai-fill-emphasis: rgba(255, 255, 255, 0.12);
+  --convai-fill-hover: rgba(255, 255, 255, 0.09);
+  --convai-fill-selected: rgba(255, 255, 255, 0.24);
+  --convai-fill-pressed: rgba(255, 255, 255, 0.26);
+  --convai-fill-highlight: rgba(255, 255, 255, 0.12);
+  --convai-edge: rgba(255, 255, 255, 0.28);
+  --convai-edge-strong: rgba(255, 255, 255, 0.5);
+  --convai-edge-button: rgba(255, 255, 255, 0.5);
+  --convai-edge-key: rgba(255, 255, 255, 0.5);
+  --convai-edge-disabled: rgba(255, 255, 255, 0.28);
+  --convai-focus-ring: #f6f8fa;
+  --convai-scroll-thumb: rgba(255, 255, 255, 0.5);
+  --convai-scroll-thumb-hover: rgba(255, 255, 255, 0.66);
+  --convai-text-secondary: rgba(246, 248, 250, 0.82);
+  --convai-text-tertiary: rgba(246, 248, 250, 0.72);
+  --convai-text-disabled: rgba(246, 248, 250, 0.52);
+  --convai-danger-fill-button-pressed: #d92d20;
+  --convai-fill-disabled: rgba(255, 255, 255, 0.04);
+  --convai-fill-emphasis-disabled: rgba(255, 255, 255, 0.048);
+  --convai-fill-selected-disabled: rgba(255, 255, 255, 0.096);
+}
+
+/* Reduce motion: every motion becomes a 150 ms fade; shots and crossfades cut (as the kit builds it). */
+.convai-theme.convai-reduce-motion {
+  --convai-motion-standard: 150ms;
+  --convai-motion-deliberate: 150ms;
+  --convai-motion-island: 150ms;
+  --convai-motion-lens: 150ms;
+  --convai-motion-shot: 0ms;
+  --convai-motion-crossfade: 0ms;
+}
+
+/* Forced colors: the focus ring is the system's highlight. A control drawn as is (forced-color-adjust:
+   none, a chosen segment or an on tile) would otherwise ring itself in the theme's own gray, which
+   vanishes on a white contrast theme. Both theme selectors, so increased contrast does not win. */
+@media (forced-colors: active) {
+  .convai-theme,
+  .convai-theme.convai-high-contrast {
+    --convai-focus-ring: Highlight;
+  }
+}

@@ -1,0 +1,184 @@
+.convai-tip {
+  position: fixed;
+  z-index: 20;
+  display: flex;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: calc(280px * var(--convai-text-scale));
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: var(--convai-radius-m);
+  background: var(--convai-accent-user);
+  color: var(--convai-accent-user-text);
+  font-family: var(--convai-font-ui);
+  pointer-events: none;
+  animation: convai-tip-in var(--convai-motion-deliberate) var(--convai-motion-ease) both;
+}
+
+.convai-tip--over-picture {
+  box-shadow: 0 0 0 1px var(--convai-edge-onlight);
+}
+
+.convai-tip--leaving {
+  animation: convai-tip-out var(--convai-motion-fast) linear both;
+}
+
+/* In: scale .92 → 1 and a fade from the tail, 250 ms; Reduce motion: the fade alone. */
+@keyframes convai-tip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes convai-tip-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes convai-tip-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.convai-reduce-motion .convai-tip:not(.convai-tip--leaving) {
+  animation-name: convai-tip-fade-in;
+  animation-duration: var(--convai-motion-fast);
+}
+
+.convai-tip__tail {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--convai-accent-user);
+  transform: rotate(45deg);
+}
+
+.convai-tip--above .convai-tip__tail {
+  bottom: -7px;
+}
+
+.convai-tip--below .convai-tip__tail {
+  top: -7px;
+}
+
+.convai-tip--left .convai-tip__tail {
+  right: -7px;
+}
+
+.convai-tip--right .convai-tip__tail {
+  left: -7px;
+}
+
+/* The edge follows the tail's outer sides only, so none is drawn inside the bubble. */
+.convai-tip--over-picture.convai-tip--above .convai-tip__tail {
+  box-shadow: 1px 1px 0 0 var(--convai-edge-onlight);
+}
+
+.convai-tip--over-picture.convai-tip--below .convai-tip__tail {
+  box-shadow: -1px -1px 0 0 var(--convai-edge-onlight);
+}
+
+.convai-tip--over-picture.convai-tip--left .convai-tip__tail {
+  box-shadow: 1px -1px 0 0 var(--convai-edge-onlight);
+}
+
+.convai-tip--over-picture.convai-tip--right .convai-tip__tail {
+  box-shadow: -1px 1px 0 0 var(--convai-edge-onlight);
+}
+
+.convai-tip__title {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+  line-height: normal;
+  hyphens: auto;
+}
+
+.convai-tip__key {
+  display: flex;
+  box-sizing: border-box;
+  min-width: calc(22px * var(--convai-text-scale));
+  height: calc(22px * var(--convai-text-scale));
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  border-radius: var(--convai-radius-xs);
+  background: var(--convai-accent-user-key);
+  font-family: inherit;
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+}
+
+.convai-tip__line {
+  position: relative;
+  color: var(--convai-accent-user-text-quiet);
+  font-size: var(--convai-size-control);
+  font-weight: 400;
+  line-height: 1.4;
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+/* The halo follows the target's shape, breathes once for 1.2 s, then stays still.
+   Reduced motion disables the animation. */
+.convai-tip-halo {
+  position: fixed;
+  z-index: 19;
+  box-shadow: 0 0 6px 4px color-mix(in srgb, var(--convai-accent-user) 32%, transparent);
+  pointer-events: none;
+  animation: convai-tip-breathe 1.2s cubic-bezier(0, 0.55, 0.45, 1) 1 both;
+}
+
+.convai-tip-halo--leaving {
+  animation: convai-tip-out var(--convai-motion-fast) linear both;
+}
+
+@keyframes convai-tip-breathe {
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.convai-reduce-motion .convai-tip-halo:not(.convai-tip-halo--leaving) {
+  animation: none;
+}
+
+/* Forced colors drop shadows: the bubble keeps an outline and the halo a ring of its own. */
+@media (forced-colors: active) {
+  .convai-tip {
+    outline: 1px solid CanvasText;
+  }
+
+  .convai-tip__tail {
+    display: none;
+  }
+
+  .convai-tip-halo {
+    outline: 2px dashed Highlight;
+    outline-offset: 4px;
+  }
+}
+
+/* One bubble on screen: while it shows, the target's own tooltip would stand where it stands. */
+.convai-tip-shows .convai-tooltip {
+  visibility: hidden;
+}

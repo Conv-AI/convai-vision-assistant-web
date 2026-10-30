@@ -1,0 +1,69 @@
+.convai-theme {
+  --va-surface-stage: #121215;
+  --va-edge-stage: rgba(255, 255, 255, 0.06);
+
+  --va-launch-light: #16191a;
+
+  --va-portrait-fade: rgba(10, 10, 12, 0.2);
+
+  --va-continuum-veil: color-mix(in srgb, var(--convai-surface-ground) 80%, transparent);
+
+  --va-text-72: color-mix(in srgb, var(--convai-text-primary) 72%, transparent);
+  /* A floating panel's popover shadow . */
+  --va-shadow-popover: rgba(0, 0, 0, 0.45);
+
+  --va-viewfinder: rgba(117, 219, 168, 0.7);
+
+  --va-loader-ring: rgba(246, 248, 250, 0.25);
+  /* The inset preview's 1 px ring . */
+  --va-preview-ring: rgba(255, 255, 255, 0.1);
+
+  --va-crop-dim: var(--convai-scrim);
+
+  --va-drop-veil: rgba(10, 10, 12, 0.86);
+
+  --va-paused-veil: rgba(10, 10, 12, 0.78);
+  /* A menu row's note over the row's pressed fill: text.primary at 70 %, 4.9 : 1 there. */
+  --va-menu-aside-on-fill: rgba(246, 248, 250, 0.7);
+
+  --va-card-scrim: rgba(5, 5, 6, 0.78);
+
+  --va-card-line: rgba(246, 248, 250, 0.72);
+
+  --va-dot: rgba(246, 248, 250, 0.4);
+  /* The first run's backdrop between its light and the ground . */
+  --va-first-run-mid: #0c0d0f;
+  /* A dash still to come: text.primary at 18 % . */
+  --va-dash-off: rgba(246, 248, 250, 0.18);
+
+  --va-card-selected: rgba(255, 255, 255, 0.1);
+
+  --va-first-run-card: #1b1c1e;
+
+  --va-place-well: linear-gradient(160deg, #2b2f36, #1a1c20);
+  --va-place-app: rgba(255, 255, 255, 0.9);
+  --va-place-kira-edge: rgba(255, 255, 255, 0.14);
+  --va-place-radio: rgba(255, 255, 255, 0.3);
+
+  --va-style-line: rgba(246, 248, 250, 0.7);
+  --va-style-line-quiet: rgba(246, 248, 250, 0.3);
+  --va-style-bubble: #2a2a2e;
+
+  --va-tool-open: rgba(255, 255, 255, 0.18);
+
+  --va-camera-scrim: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0) 22%,
+    rgba(0, 0, 0, 0) 55%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+}
+
+.convai-theme.convai-high-contrast {
+  --va-edge-stage: rgba(255, 255, 255, 0.28);
+
+  --va-crop-dim: rgba(0, 0, 0, 0.7);
+  /* Over high contrast's pressed fill (26 %) a note needs 90 % for 4.5 : 1 (5.0 : 1). */
+  --va-menu-aside-on-fill: rgba(246, 248, 250, 0.9);
+}

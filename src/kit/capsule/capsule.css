@@ -1,0 +1,181 @@
+.convai-capsule {
+  --convai-capsule-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-12);
+  box-sizing: border-box;
+  width: 420px;
+  max-width: 100%;
+  height: calc(var(--convai-capsule-height) * var(--convai-text-scale));
+
+  padding: 0 10px;
+  border: 1px solid var(--convai-edge-island);
+  border-radius: var(--convai-radius-capsule);
+  background: var(--convai-surface-island);
+  box-shadow: 0 12px 32px var(--convai-shadow-soft);
+}
+
+.convai-capsule--compact {
+  --convai-capsule-height: 56px;
+  width: 360px;
+}
+
+.convai-capsule--compact .convai-capsule__key .convai-key-cap {
+  height: calc(22px * var(--convai-text-scale));
+  min-width: calc(22px * var(--convai-text-scale));
+  box-shadow: inset 0 0 0 1px var(--convai-edge-key);
+}
+
+.convai-capsule--floating {
+  width: 360px;
+  padding: 0 var(--convai-space-8) 0 10px;
+}
+
+.convai-capsule--floating .convai-capsule__lens {
+  padding: 2px;
+}
+
+.convai-capsule--floating .convai-capsule__words {
+  gap: var(--convai-space-4);
+}
+
+.convai-capsule--floating .convai-capsule__label {
+  font-size: var(--convai-size-row);
+}
+
+.convai-capsule__source {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+}
+
+.convai-capsule__source-words {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.convai-capsule__dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+
+.convai-capsule__dot[data-mark='live'] {
+  background: var(--convai-accent-share);
+}
+
+.convai-capsule__dot[data-mark='paused'] {
+  box-shadow: inset 0 0 0 1.5px var(--convai-text-secondary);
+}
+
+.convai-capsule__dot[data-mark='failed'] {
+  background: var(--convai-danger-fill);
+}
+
+.convai-capsule--over-picture {
+  box-shadow: none;
+}
+
+.convai-capsule__lens {
+  position: relative;
+  display: flex;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+
+.convai-capsule__lens[aria-disabled='true'] {
+  cursor: default;
+}
+
+.convai-capsule__lens:not([aria-disabled='true']):hover:not(:focus-visible)::after {
+  position: absolute;
+  inset: -5px;
+  border: 1px solid var(--convai-text-tertiary);
+  border-radius: 50%;
+  content: '';
+}
+
+.convai-capsule__words {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.convai-capsule__label,
+.convai-capsule__hint {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.convai-capsule__label {
+  color: var(--convai-text-primary);
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+}
+
+.convai-capsule__hint {
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+}
+
+.convai-capsule__hint .convai-key-cap {
+  height: calc(18px * var(--convai-text-scale));
+  min-width: calc(18px * var(--convai-text-scale));
+  padding: 0 5px;
+  border-radius: 5px;
+  box-shadow: inset 0 -1px 0 var(--convai-edge-key);
+  vertical-align: middle;
+}
+
+.convai-capsule__hint .convai-key-cap--single {
+  padding: 0;
+}
+
+.convai-capsule__hint > span {
+  white-space: pre;
+}
+
+.convai-capsule__tools {
+  display: flex;
+  flex: none;
+  gap: var(--convai-space-4);
+}
+
+/* The tools stand 4 apart: each takes presses 44 high but only 2 past its sides, so neighbours meet
+   halfway instead of overlapping. */
+.convai-capsule__tools .convai-button::before {
+  inset: -6px -2px;
+}
+
+.convai-capsule__action {
+  display: flex;
+  flex: none;
+}
+
+.convai-capsule__words-anchor {
+  flex: 1;
+  min-width: 0;
+}
+
+/* An account with no characters: the Lens is a flat glyph at text.disabled's strength. */
+.convai-capsule[data-state='no-character'] .convai-capsule__lens {
+  opacity: 0.32;
+}
+
+.convai-capsule__key {
+  display: flex;
+  flex: none;
+}

@@ -1,0 +1,10 @@
+Convai Vision Assistant for the web
+Copyright 2026 Convai Technologies Inc.
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product includes the Inter typeface (src/kit/fonts/Inter-Variable.woff2), converted to WOFF2
+from Inter 4.001, and the subsets cut from it by scripts/subset-inter.py
+(src/kit/fonts/Inter-Variable-*.woff2), which are the files the app loads. Copyright 2016 The Inter
+Project Authors (https://github.com/rsms/inter). Licensed under the SIL Open Font License,
+Version 1.1 (see src/kit/fonts/OFL.txt).

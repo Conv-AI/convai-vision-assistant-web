@@ -1,0 +1,66 @@
+.convai-lens {
+  --convai-lens-shadow: 0 calc(var(--convai-lens-size) * 0.12) calc(var(--convai-lens-size) * 0.35)
+    var(--convai-scrim);
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--convai-lens-size);
+  height: var(--convai-lens-size);
+  border-radius: 50%;
+  line-height: 0;
+  box-shadow: var(--convai-lens-shadow);
+}
+
+.convai-lens__canvas {
+  position: absolute;
+  pointer-events: none;
+}
+
+.convai-lens--offline {
+  box-shadow:
+    0 0 0 1px var(--convai-text-tertiary),
+    var(--convai-lens-shadow);
+}
+
+.convai-lens--offline > .convai-lens__canvas {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+.convai-lens__warning {
+  position: absolute;
+  top: calc(50% + var(--convai-lens-size) * 0.3536 - 5px);
+  left: calc(50% + var(--convai-lens-size) * 0.3536 - 5px);
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: var(--convai-warn);
+  box-shadow: 0 0 0 2px var(--convai-surface-island);
+}
+
+/* High contrast: a 1 px edge.strong ring around the glass on every surface. It is a shadow, so the
+   focus ring of a control that holds the Lens keeps the outline. */
+.convai-high-contrast .convai-lens {
+  box-shadow:
+    0 0 0 1px var(--convai-edge-strong),
+    var(--convai-lens-shadow);
+}
+
+/* Forced colors: the Lens keeps its own light, and a ring in the text's color marks where it is;
+   offline, the ring is GrayText (the drawing fades to almost nothing on black). */
+@media (forced-colors: active) {
+  .convai-lens {
+    outline: 1px solid CanvasText;
+  }
+
+  .convai-lens--offline {
+    outline-color: GrayText;
+  }
+
+  .convai-lens__warning {
+    forced-color-adjust: none;
+    background: Mark;
+    box-shadow: 0 0 0 2px Canvas;
+  }
+}

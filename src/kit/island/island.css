@@ -1,0 +1,320 @@
+/* The Island stands 16 in from its place's sides: in a narrow column it takes the column less 32. */
+.convai-island {
+  --convai-island-band: calc(40px * (1 + (var(--convai-text-scale) - 1) * 2 / 3));
+
+  --convai-island-grow: calc((var(--convai-text-scale) - 1) * 20px / 3);
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--convai-island-band);
+  padding: 0 var(--convai-space-16);
+}
+
+.convai-island__surface {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid var(--convai-edge-island);
+  border-radius: calc(var(--convai-island-band) / 2);
+  background: var(--convai-surface-island);
+
+  box-shadow: 0 12px 32px var(--convai-shadow-soft);
+  color: var(--convai-text-primary);
+}
+
+.convai-island__content {
+  animation: convai-island-in var(--convai-motion-fast) var(--convai-motion-ease);
+}
+
+.convai-island__surface[hidden] {
+  display: none;
+}
+
+.convai-island__surface[data-form^='banner'] {
+  border-radius: var(--convai-radius-l);
+}
+
+/* A toast on two lines keeps radius 20 at every text size (N-FIT step 3). */
+.convai-island__surface:has(.convai-island__toast--two-lines) {
+  border-radius: 20px;
+}
+
+@keyframes convai-island-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.convai-island--over-lighter .convai-island__surface {
+  border-color: var(--convai-edge-key);
+}
+
+.convai-island--over-picture .convai-island__surface {
+  box-shadow: none;
+}
+
+/* ---- Toast, Undo toast, persistent problem ------------------------------------------------------ */
+
+.convai-island__toast {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  max-width: min(458px, 100%);
+  min-height: calc(var(--convai-island-band) - 2px);
+  padding: 0 calc(5px + var(--convai-island-grow)) 0 calc(15px + var(--convai-island-grow));
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.convai-island__toast[data-fit='no-close'],
+.convai-island__toast[data-fit='brief'],
+.convai-island__toast[data-fit='two-lines'] {
+  padding-right: calc(15px + var(--convai-island-grow));
+}
+
+.convai-island__toast--action[data-fit] {
+  padding-right: calc(5px + var(--convai-island-grow));
+}
+
+.convai-island__toast--loader {
+  padding-left: 9px;
+}
+
+.convai-island__toast--warn {
+  padding-left: 13px;
+}
+
+.convai-island__toast--loader > .convai-lens {
+  margin-right: 10px;
+}
+
+.convai-island__mark {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--convai-text-primary);
+}
+
+.convai-island__mark--warn {
+  background: var(--convai-warn);
+}
+
+.convai-island__icon {
+  flex: none;
+  margin-right: 8px;
+}
+
+.convai-island__line {
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.convai-island__detail {
+  flex: none;
+  white-space: pre;
+  color: var(--convai-text-secondary);
+  font-weight: 400;
+}
+
+.convai-island__toast.convai-island__toast--two-lines {
+  align-items: flex-start;
+  padding: 10px 15px;
+  white-space: normal;
+}
+
+.convai-island__toast--two-lines > .convai-island__line {
+  display: block;
+  line-height: 1.4;
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+.convai-island__toast--two-lines > .convai-island__mark {
+  margin-top: calc((1.4em - 6px) / 2);
+  margin-right: 10px;
+}
+
+.convai-island__toast--two-lines > .convai-island__icon {
+  margin-top: calc((1.4em - 16px) / 2);
+  margin-right: 10px;
+}
+
+.convai-island__toast--two-lines > .convai-island__action {
+  align-self: center;
+}
+
+.convai-island__action.convai-button {
+  --convai-control-gain: calc(20 / 28);
+  margin-left: 12px;
+  padding: 0 calc(12px + var(--convai-island-grow));
+}
+
+.convai-island__action svg {
+  width: 14px;
+  height: 14px;
+}
+
+.convai-island__toast--loader > .convai-island__action {
+  margin-left: 14px;
+}
+
+/* A toast's close: always shown, pointer only (Esc is its key), 8 after the words, 10 after an
+   action (12 in the loader form), 6 from the edge; glyph 12 in text.secondary, text.primary while
+   the Island is under the pointer. */
+.convai-island__close {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--convai-text-secondary);
+  cursor: pointer;
+}
+
+/* Every control here takes a press over 44 . */
+.convai-island__close::before,
+.convai-island__dot::before {
+  position: absolute;
+  inset: min(0px, calc((100% - var(--convai-target)) / 2));
+  content: '';
+}
+
+.convai-island__surface:hover .convai-island__close,
+.convai-island__close:hover {
+  color: var(--convai-text-primary);
+}
+
+.convai-island__close--toast {
+  margin-left: 8px;
+}
+
+.convai-island__action + .convai-island__close--toast {
+  margin-left: 10px;
+}
+
+.convai-island__toast--loader > .convai-island__action + .convai-island__close--toast {
+  margin-left: 12px;
+}
+
+/* ---- The dot: 40, the notification's glyph, a badge until resolved ------------------------------ */
+
+.convai-island__dot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--convai-island-band) - 2px);
+  height: calc(var(--convai-island-band) - 2px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--convai-text-primary);
+  cursor: pointer;
+}
+
+.convai-island__badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  box-sizing: border-box;
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid var(--convai-surface-island);
+  border-radius: var(--convai-radius-badge);
+  background: var(--convai-text-primary);
+}
+
+.convai-island__badge--second {
+  right: 12px;
+}
+
+.convai-island__badge--warn {
+  background: var(--convai-warn);
+}
+
+.convai-island__banner {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 458px;
+  max-width: 100%;
+  padding: 15px 17px;
+}
+
+.convai-island__banner-text {
+  margin-bottom: 12px;
+}
+
+.convai-island__banner-text::after {
+  display: block;
+  clear: both;
+  content: '';
+}
+
+.convai-island__float {
+  float: right;
+  width: 24px;
+  height: 18px;
+}
+
+.convai-island__title,
+.convai-island__body {
+  display: block;
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+.convai-island__title {
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+}
+
+.convai-island__body {
+  margin-top: 4px;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  line-height: 1.4;
+}
+
+.convai-island__banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.convai-island__banner-actions > .convai-button {
+  --convai-control-gain: 0;
+  padding: 0 14px;
+}
+
+.convai-island__banner-actions--two > .convai-button {
+  flex: 1 1 calc(50% - 4px);
+  min-width: max-content;
+}
+
+.convai-island__banner > .convai-island__close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+/* Its ring stands on the tool's own edge, inside the 24 corner. */
+.convai-island__banner > .convai-island__close:focus-visible {
+  outline-offset: 0;
+}
+
+/* Reduce motion keeps the fade, which is all the Island does: no morph, no slide. */

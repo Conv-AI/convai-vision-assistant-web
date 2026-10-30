@@ -1,0 +1,959 @@
+.va-settings {
+  display: none;
+  box-sizing: border-box;
+  inset: 0;
+  width: min(920px, 100% - 2 * var(--convai-space-16));
+  max-width: none;
+  height: min(760px, 100% - 2 * var(--convai-space-16));
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--convai-edge);
+  border-radius: var(--convai-radius-l);
+  background: var(--convai-surface-sheet);
+  box-shadow: 0 30px 80px var(--convai-shadow-soft);
+  color: var(--convai-text-primary);
+  font: inherit;
+}
+
+.va-settings[open] {
+  display: flex;
+}
+
+.va-settings::backdrop {
+  background: var(--convai-scrim);
+}
+
+.va-settings[data-narrow] {
+  flex-direction: column;
+}
+
+/* Sidebar ------------------------------------------------------------------------------------------ */
+
+.va-settings__nav {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 2px;
+  box-sizing: border-box;
+  width: 220px;
+  padding: var(--convai-space-16) var(--convai-space-12);
+  background: var(--convai-surface-sidebar);
+}
+
+.va-settings__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.va-settings__section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-height: calc(34px * var(--convai-text-scale));
+  margin: 0;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--convai-radius-s);
+  background: transparent;
+  color: var(--va-text-72);
+  font: inherit;
+  font-size: var(--convai-size-row);
+  line-height: 1;
+  text-align: left;
+  cursor: pointer;
+}
+
+.va-settings__section > svg {
+  flex: none;
+}
+
+.va-settings__section:hover {
+  background: var(--convai-fill-hover);
+}
+
+.va-settings__section[aria-selected='true'] {
+  background: var(--convai-fill-selected);
+  color: var(--convai-text-primary);
+}
+
+.convai-high-contrast .va-settings__section[aria-selected='true'] {
+  box-shadow: inset 0 0 0 1px var(--convai-edge-strong);
+}
+
+.va-settings__search {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--convai-space-8);
+  box-sizing: border-box;
+  min-height: calc(36px * var(--convai-text-scale));
+  margin-bottom: 10px;
+  padding: 0 10px;
+  border-radius: var(--convai-radius-s);
+  background: var(--convai-fill);
+  color: var(--convai-text-tertiary);
+}
+
+/* The ring is drawn around the field, with the sheet's color in its gap . */
+.va-settings__search:focus-within {
+  box-shadow:
+    0 0 0 var(--convai-focus-gap) var(--convai-surface-sheet),
+    0 0 0 calc(var(--convai-focus-gap) + var(--convai-focus-width)) var(--convai-focus-ring);
+}
+
+.va-settings__search-glyph {
+  flex: none;
+}
+
+.va-settings__search-field {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-control);
+  outline: none;
+}
+
+.va-settings__search-field::placeholder {
+  color: var(--convai-text-tertiary);
+}
+
+.va-settings__search-field::-webkit-search-cancel-button {
+  display: none;
+}
+
+.va-settings__search-field:focus-visible {
+  outline: none;
+}
+
+/* Clear: 18 round on fill.selected, with a 24 target around it (kit round 7, 17). */
+.va-settings__search-clear {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--convai-radius-capsule);
+  background: var(--convai-fill-selected);
+  color: var(--convai-text-primary);
+  cursor: pointer;
+}
+
+.va-settings__search-clear::before {
+  position: absolute;
+  inset: -3px;
+  content: '';
+}
+
+.va-settings__search-clear > svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.va-settings__narrow-nav {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--convai-space-12);
+  padding: var(--convai-space-16) var(--convai-space-16) 0;
+}
+
+.va-settings__narrow-nav > .va-settings__search {
+  flex: 1 1 200px;
+  margin-bottom: 0;
+}
+
+/* Page ----------------------------------------------------------------------------------------------- */
+
+.va-settings__main {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.va-settings__header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--convai-space-12);
+  box-sizing: border-box;
+  height: 56px;
+  padding: 0 var(--convai-space-16) 0 var(--convai-space-32);
+  border-bottom: 1px solid transparent;
+}
+
+.va-settings__header[data-line] {
+  border-bottom-color: var(--convai-edge);
+}
+
+/* 24 to the sheet: at the top once the page has scrolled, at the foot while more lies below. */
+.va-settings__fade {
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  height: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--convai-motion-fast);
+}
+
+.va-settings__fade--top {
+  top: 56px;
+  background: linear-gradient(to bottom, var(--convai-surface-sheet), transparent);
+}
+
+.va-settings__fade--bottom {
+  bottom: 0;
+  background: linear-gradient(to top, var(--convai-surface-sheet), transparent);
+}
+
+.va-settings__fade[data-on] {
+  opacity: 1;
+}
+
+.convai-reduce-motion .va-settings__fade {
+  transition: none;
+}
+
+.va-settings__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--convai-size-heading);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variation-settings: 'opsz' 17;
+}
+
+/* The scroller spans the page, so its bar stands at the window's edge and the column keeps 600. */
+.va-settings__page {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scroll-padding-block: var(--convai-space-24);
+}
+
+.va-settings__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-24);
+  box-sizing: border-box;
+  max-width: 664px;
+  padding: var(--convai-space-8) var(--convai-space-32) var(--convai-space-32);
+}
+
+.va-settings[data-narrow] .va-settings__header,
+.va-settings[data-narrow] .va-settings__content {
+  padding-right: var(--convai-space-16);
+  padding-left: var(--convai-space-16);
+}
+
+.va-settings[data-narrow] .va-settings__content {
+  max-width: none;
+}
+
+.va-settings__intro {
+  margin: 0 0 -8px;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* Groups and rows ------------------------------------------------------------------------------------ */
+
+.va-settings__group {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--convai-space-8);
+}
+
+.va-settings__group-label {
+  display: flex;
+  align-items: center;
+  gap: var(--convai-space-8);
+  padding: 0 4px;
+}
+
+.va-settings__group-name {
+  flex: 1;
+  min-width: 0;
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+}
+
+.va-settings__show-in {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--convai-text-secondary);
+  font: inherit;
+  font-size: var(--convai-size-meta);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.va-settings__show-in::before {
+  position: absolute;
+  inset: -6px -4px;
+  content: '';
+}
+
+.va-settings__show-in:hover {
+  color: var(--convai-text-primary);
+}
+
+.va-settings__rows {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--convai-radius-m);
+  background: var(--convai-fill);
+}
+
+.convai-high-contrast .va-settings__rows {
+  box-shadow: inset 0 0 0 1px var(--convai-edge);
+}
+
+/* Rows after the first have a hairline 16 in from the left. */
+.va-settings__row-box {
+  position: relative;
+}
+
+/* A lit row rounds only where the group does (kit `.cv-rowgroup > .cv-row:first-child`). */
+.va-settings__row-box:first-child {
+  border-top-left-radius: var(--convai-radius-m);
+  border-top-right-radius: var(--convai-radius-m);
+}
+
+.va-settings__row-box:last-child {
+  border-bottom-left-radius: var(--convai-radius-m);
+  border-bottom-right-radius: var(--convai-radius-m);
+}
+
+/* The hairline takes its own 1 px between the rows (kit `.cv-rowgroup__sep`). */
+.va-settings__row-box + .va-settings__row-box {
+  margin-top: 1px;
+}
+
+.va-settings__row-box + .va-settings__row-box::before {
+  position: absolute;
+  top: -1px;
+  right: 0;
+  left: var(--convai-space-16);
+  height: 1px;
+  background: var(--convai-edge);
+  content: '';
+}
+
+.va-settings__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--convai-space-8) 14px;
+  box-sizing: border-box;
+  min-height: calc(48px * var(--convai-text-scale));
+  padding: var(--convai-space-8) var(--convai-space-16);
+}
+
+.va-settings__row[data-presses] {
+  cursor: pointer;
+}
+
+.va-settings__row-box:has(> .va-settings__row[data-presses]:hover) {
+  background: var(--convai-fill-hover);
+}
+
+/* "Show in …" points the row out: fill.selected, whole for 0.6 s, then fading over 1 s. */
+.va-settings__row-box[data-lit] {
+  animation: va-settings-lit 1.6s linear forwards;
+}
+
+@keyframes va-settings-lit {
+  0%,
+  37.5% {
+    background: var(--convai-fill-selected);
+  }
+
+  100% {
+    background: transparent;
+  }
+}
+
+.convai-reduce-motion .va-settings__row-box[data-lit] {
+  animation: none;
+  background: var(--convai-fill-selected);
+}
+
+.va-settings__words {
+  display: flex;
+  flex: 1 1 200px;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* Label 14 and line 12 at the font's own line height, 4 apart: a described row is 52 (kit `.cv-row`). */
+.va-settings__label {
+  font-size: var(--convai-size-row);
+  line-height: normal;
+  overflow-wrap: anywhere;
+}
+
+.va-settings__label--strong {
+  font-weight: 600;
+}
+
+.va-settings__line {
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+  line-height: normal;
+  text-wrap: pretty;
+}
+
+/* Something went wrong with the row's last change (a microphone that could not be used). */
+.va-settings__line--warning {
+  color: var(--convai-warn-text);
+}
+
+.va-settings__under {
+  display: flex;
+  flex-direction: column;
+  gap: var(--convai-space-8);
+  padding: 0 var(--convai-space-16) var(--convai-space-12);
+}
+
+/* A line under a row (a question, a refusal) is 12/1.45 (kit `.cv-set-under__line`). */
+.va-settings__under .va-settings__line {
+  line-height: 1.45;
+}
+
+/* The character card: a 44 portrait, the name in 600, Change. */
+.va-settings__row--card {
+  min-height: calc(68px * var(--convai-text-scale));
+}
+
+.va-settings__portrait {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border-radius: var(--convai-radius-capsule);
+  background: var(--convai-portrait-ground);
+  color: var(--convai-text-secondary);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Keys: Hold, then 28 caps in 13 / 600 on fill.emphasis, edged in edge.key (kit `.cv-keycap--28`,
+   VADSettings 2–4). */
+.va-settings__keys {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--convai-space-8);
+}
+
+.va-settings__hold {
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+}
+
+.va-settings__key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: calc(28px * var(--convai-text-scale));
+  height: calc(28px * var(--convai-text-scale));
+  padding: 0 9px;
+  border-radius: calc(var(--convai-radius-s) - 2px);
+  background: var(--convai-fill-emphasis);
+  box-shadow: inset 0 0 0 1px var(--convai-edge-key);
+  color: var(--convai-text-primary);
+  font: inherit;
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+}
+
+.va-settings__busy {
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: var(--convai-radius-capsule);
+  background: var(--convai-danger-fill);
+}
+
+/* Sliders in a row are 170 wide . */
+.va-settings__row .convai-slider {
+  --convai-slider-width: 170px;
+}
+
+/* Text size's ends picture the scale: A at 13 and A at 19, both 600, on one baseline. */
+.va-settings__end {
+  font-weight: 600;
+  line-height: 1;
+}
+
+.va-settings__end--small {
+  font-size: 13px;
+}
+
+.va-settings__end--large {
+  font-size: 19px;
+}
+
+.va-settings__sample {
+  margin: 0;
+  padding: var(--convai-space-12) 14px;
+  border-radius: var(--convai-radius-s);
+  background: var(--convai-surface-ground);
+  line-height: 1.3;
+  text-wrap: pretty;
+}
+
+.va-settings__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.va-settings__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 10px;
+  border: 0;
+  border-radius: var(--convai-radius-m);
+  background: var(--convai-fill-emphasis);
+  color: var(--convai-text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.va-settings__card:hover {
+  background-image: linear-gradient(var(--convai-fill-hover), var(--convai-fill-hover));
+}
+
+.va-settings__card[aria-checked='true'] {
+  box-shadow: 0 0 0 2px var(--convai-accent-user);
+}
+
+.va-settings__card-picture {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+  height: 64px;
+  padding: 10px;
+  border-radius: var(--convai-radius-s);
+  background: var(--convai-surface-ground);
+}
+
+.va-settings__card-line {
+  height: 5px;
+  border-radius: 3px;
+  background: var(--va-style-line);
+}
+
+/* Moments: a mint mark, a question, the answer. */
+.va-settings__card[data-style='moments'] .va-settings__card-line:nth-child(1) {
+  width: 22%;
+  background: var(--convai-accent-share);
+}
+
+.va-settings__card[data-style='moments'] .va-settings__card-line:nth-child(2) {
+  width: 70%;
+  background: var(--va-style-line-quiet);
+}
+
+.va-settings__card[data-style='moments'] .va-settings__card-line:nth-child(3) {
+  width: 90%;
+}
+
+.va-settings__card[data-style='moments'] .va-settings__card-line:nth-child(4) {
+  width: 60%;
+}
+
+/* Continuum: centred lines over the stage. */
+.va-settings__card[data-style='continuum'] .va-settings__card-line {
+  align-self: center;
+}
+
+.va-settings__card[data-style='continuum'] .va-settings__card-line:nth-child(odd) {
+  background: var(--va-style-line-quiet);
+}
+
+.va-settings__card[data-style='continuum'] .va-settings__card-line:nth-child(1) {
+  width: 50%;
+}
+
+.va-settings__card[data-style='continuum'] .va-settings__card-line:nth-child(2) {
+  width: 80%;
+}
+
+.va-settings__card[data-style='continuum'] .va-settings__card-line:nth-child(3) {
+  width: 46%;
+}
+
+.va-settings__card[data-style='continuum'] .va-settings__card-line:nth-child(4) {
+  width: 70%;
+}
+
+/* Conversation: bubbles, the person's on the right. */
+.va-settings__card[data-style='conversation'] .va-settings__card-line:nth-child(odd) {
+  align-self: flex-end;
+  background: var(--convai-text-primary);
+}
+
+.va-settings__card[data-style='conversation'] .va-settings__card-line:nth-child(even) {
+  background: var(--va-style-bubble);
+}
+
+.va-settings__card[data-style='conversation'] .va-settings__card-line:nth-child(1) {
+  width: 46%;
+}
+
+.va-settings__card[data-style='conversation'] .va-settings__card-line:nth-child(2) {
+  width: 66%;
+}
+
+.va-settings__card[data-style='conversation'] .va-settings__card-line:nth-child(3) {
+  width: 38%;
+}
+
+.va-settings__card[data-style='conversation'] .va-settings__card-line:nth-child(4) {
+  width: 58%;
+}
+
+.va-settings__card-words {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 2px;
+}
+
+.va-settings__card-title {
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+}
+
+.va-settings__card-text {
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-meta);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.va-settings__empty {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.va-settings__empty-title {
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--convai-size-body);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.va-settings__empty-line {
+  max-width: 340px;
+  margin: 0;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.va-captions[data-backing] {
+  box-sizing: border-box;
+  padding: var(--convai-space-12) var(--convai-space-16);
+  border-radius: var(--convai-radius-m);
+  background: var(--convai-surface-sheet);
+}
+
+@media (forced-colors: active) {
+  .va-settings {
+    border: 1px solid CanvasText;
+  }
+
+  .va-settings__rows,
+  .va-settings__card {
+    border: 1px solid CanvasText;
+  }
+
+  /* Chosen is a fill or a border, so an outline always means the focus. */
+  .va-settings__section[aria-selected='true'] {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .va-settings__card[aria-checked='true'] {
+    border: 3px double Highlight;
+  }
+
+  /* The search keeps its edge at rest; its focus ring is the system's. */
+  .va-settings__search {
+    border: 1px solid ButtonText;
+  }
+
+  /* Rings drawn as shadows (the search, whole-row buttons, the recording pill) become outlines, in
+     Highlight as the browser draws a focused control's ring. */
+  .va-settings__search:focus-within,
+  .va-settings__recording {
+    outline: var(--convai-focus-width) solid Highlight;
+    outline-offset: var(--convai-focus-gap);
+  }
+
+  /* Within the dialog: the rows' own `outline: none` comes later in this file. */
+  .va-settings .va-settings__row--link:focus-visible,
+  .va-settings .va-settings__hit:focus-visible {
+    outline: var(--convai-focus-width) solid Highlight;
+    outline-offset: calc(-1 * var(--convai-focus-width));
+  }
+
+  .va-settings__key {
+    border: 1px solid CanvasText;
+  }
+
+  /* A key taken by another shortcut: its edge was a danger-colored shadow. */
+  .va-settings .va-settings__keys[data-conflict] .va-settings__key {
+    outline: 2px dashed CanvasText;
+    outline-offset: 1px;
+  }
+
+  .va-settings .va-settings__lock {
+    color: GrayText;
+  }
+
+  /* The transcript style pictures are bars of fill: drawn in the text's color. */
+  .va-settings .va-settings__card .va-settings__card-line:nth-child(n) {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+}
+
+/* Part 3b: the sidebar's label and gap, rows that open, Shortcuts, Privacy, How to use, licenses -- */
+
+/* "Vision Assistant" above Vision, and the gap above Privacy: 30 high, 12 in text.tertiary. */
+.va-settings__nav-label,
+.va-settings__nav-gap {
+  display: flex;
+  flex: none;
+  align-items: flex-end;
+  height: calc(30px * var(--convai-text-scale));
+  padding: 0 10px 6px;
+  box-sizing: border-box;
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+  line-height: 1;
+}
+
+/* A quiet line under a group (the licenses' source). */
+.va-settings__note {
+  margin: 0;
+  padding: 0 4px;
+  color: var(--convai-text-tertiary);
+  font-size: var(--convai-size-meta);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* A row that opens something is one button, with a chevron at its end. */
+.va-settings__row--link {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.va-settings__row--link:hover,
+.va-settings__row-box:has(> .va-settings__row > .va-settings__hit:hover) {
+  background: var(--convai-fill-hover);
+}
+
+.va-settings__row--link:focus-visible,
+.va-settings__hit:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--convai-focus-width) var(--convai-focus-ring);
+}
+
+.va-settings__value {
+  flex: none;
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-row);
+}
+
+.va-settings__chevron {
+  flex: none;
+  color: var(--convai-text-tertiary);
+}
+
+.va-settings__row-box[data-kind='info'] > .va-settings__row {
+  min-height: calc(56px * var(--convai-text-scale));
+}
+
+.va-settings__tile {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--convai-radius-s);
+  background: var(--convai-fill-emphasis);
+}
+
+.va-settings__number {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--convai-radius-capsule);
+  background: var(--convai-fill-emphasis);
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+}
+
+.va-settings__row-box[data-kind='shortcut'] > .va-settings__row {
+  position: relative;
+}
+
+.va-settings__hit {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  /* The row-box's corners, so the focus ring stays inside the card. */
+  border-radius: calc(var(--convai-radius-m) - 2px);
+  background: transparent;
+  cursor: pointer;
+}
+
+.va-settings__shortcut-keys {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--convai-space-8);
+}
+
+.va-settings__reset,
+.va-settings__under .va-settings__answers {
+  position: relative;
+}
+
+.va-settings__row-box[data-recording] {
+  background: color-mix(in srgb, var(--convai-fill-emphasis) 50%, transparent);
+}
+
+.va-settings__recording {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: calc(32px * var(--convai-text-scale));
+  padding: 0 11px;
+  border-radius: var(--convai-radius-s);
+  box-shadow: 0 0 0 var(--convai-focus-width) var(--convai-focus-ring);
+  color: var(--convai-text-secondary);
+  font-size: var(--convai-size-control);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.va-settings__keys[data-conflict] .va-settings__key {
+  box-shadow: inset 0 0 0 1.5px var(--convai-danger-text);
+}
+
+.va-settings__lock {
+  flex: none;
+  color: var(--convai-text-disabled);
+}
+
+.va-settings__line--strong {
+  margin: 0;
+  color: var(--convai-text-primary);
+}
+
+.va-settings__answers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--convai-space-8);
+}
+
+.va-settings__license-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--convai-space-12);
+}
+
+.va-settings__license-head > .va-settings__intro {
+  margin: 0;
+}
+
+.va-settings__license {
+  margin: 0;
+  padding: var(--convai-space-16);
+  border-radius: var(--convai-radius-m);
+  background: var(--convai-fill);
+  color: var(--convai-text-secondary);
+  font: inherit;
+  font-size: var(--convai-size-meta);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* The pushed page's back arrow stands 8 into the header's padding . */
+.va-settings__back {
+  margin-left: -8px;
+}
